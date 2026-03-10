@@ -3,1326 +3,2084 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Plan Diet & Workout — 90kg → 70kg</title>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<title>David Fit Program 💪</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
   :root {
-    --black: #0a0a0a;
-    --white: #f5f2ec;
-    --cream: #f0ead8;
-    --accent: #e8500a;
-    --accent2: #2d6a4f;
-    --accent3: #f4a261;
-    --mid: #1e1e1e;
-    --soft: #2e2e2e;
-    --muted: #888;
-    --border: #333;
+    --bg: #0a0a0f;
+    --surface: #12121a;
+    --surface2: #1a1a26;
+    --border: #2a2a3a;
+    --accent: #ff6b35;
+    --accent2: #ffd23f;
+    --accent3: #06ffa5;
+    --text: #f0f0f5;
+    --muted: #7070a0;
+    --danger: #ff4040;
+    --push: #ff6b35;
+    --pull: #4facfe;
+    --legs: #06ffa5;
+    --full: #ffd23f;
+    --rest: #7070a0;
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
+  html { scroll-behavior: smooth; }
+
   body {
-    background: var(--black);
-    color: var(--white);
+    background: var(--bg);
+    color: var(--text);
     font-family: 'DM Sans', sans-serif;
     overflow-x: hidden;
+    cursor: default;
   }
 
-  /* HEADER */
-  header {
-    background: var(--black);
+  /* NOISE TEXTURE OVERLAY */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.4;
+  }
+
+  /* ===== NAV ===== */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 1000;
+    background: rgba(10,10,15,0.85);
+    backdrop-filter: blur(20px);
     border-bottom: 1px solid var(--border);
-    padding: 0 24px;
-    position: sticky;
-    top: 0;
-    z-index: 100;
+    padding: 0 20px;
+    height: 60px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    height: 56px;
   }
 
-  .logo {
+  .nav-logo {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 22px;
-    letter-spacing: 3px;
+    font-size: 1.4rem;
     color: var(--accent);
+    letter-spacing: 2px;
   }
 
-  nav {
+  .nav-tabs {
     display: flex;
     gap: 4px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
   }
+  .nav-tabs::-webkit-scrollbar { display: none; }
 
-  nav button {
-    background: none;
-    border: none;
-    color: var(--muted);
-    font-family: 'DM Sans', sans-serif;
-    font-size: 13px;
-    font-weight: 500;
+  .nav-tab {
     padding: 6px 14px;
-    border-radius: 6px;
+    border-radius: 8px;
+    font-size: 0.75rem;
+    font-weight: 600;
     cursor: pointer;
+    border: 1px solid transparent;
+    color: var(--muted);
     transition: all 0.2s;
-    letter-spacing: 0.5px;
+    white-space: nowrap;
+    background: none;
+    font-family: 'DM Sans', sans-serif;
   }
 
-  nav button:hover { color: var(--white); background: var(--soft); }
-  nav button.active { color: var(--black); background: var(--white); }
+  .nav-tab.active, .nav-tab:hover {
+    color: var(--text);
+    background: var(--surface2);
+    border-color: var(--border);
+  }
 
-  /* HERO */
-  .hero {
-    padding: 60px 24px 48px;
+  .nav-tab.active { color: var(--accent); border-color: var(--accent); }
+
+  /* ===== SECTIONS ===== */
+  .section {
+    display: none;
+    min-height: 100vh;
+    padding: 80px 16px 40px;
     max-width: 900px;
     margin: 0 auto;
+    animation: fadeIn 0.4s ease;
+  }
+  .section.active { display: block; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ===== HERO / DASHBOARD ===== */
+  .hero-header {
+    text-align: center;
+    padding: 30px 0 40px;
   }
 
   .hero-tag {
     display: inline-block;
     background: var(--accent);
-    color: var(--white);
-    font-family: 'Space Mono', monospace;
-    font-size: 11px;
-    letter-spacing: 2px;
+    color: #000;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 3px;
     padding: 4px 12px;
-    border-radius: 2px;
-    margin-bottom: 20px;
+    border-radius: 4px;
     text-transform: uppercase;
-  }
-
-  .hero h1 {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: clamp(52px, 10vw, 100px);
-    line-height: 0.9;
-    letter-spacing: 2px;
-    color: var(--white);
-    margin-bottom: 8px;
-  }
-
-  .hero h1 span { color: var(--accent); }
-
-  .hero p {
-    color: var(--muted);
-    font-size: 15px;
-    margin-top: 16px;
-    max-width: 500px;
-    line-height: 1.7;
-  }
-
-  .stats-row {
-    display: flex;
-    gap: 16px;
-    margin-top: 36px;
-    flex-wrap: wrap;
-  }
-
-  .stat-box {
-    background: var(--mid);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 16px 24px;
-    flex: 1;
-    min-width: 140px;
-  }
-
-  .stat-box .label {
-    font-size: 11px;
-    color: var(--muted);
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    font-family: 'Space Mono', monospace;
-    margin-bottom: 6px;
-  }
-
-  .stat-box .value {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 32px;
-    letter-spacing: 1px;
-  }
-
-  .stat-box .value.orange { color: var(--accent); }
-  .stat-box .value.green { color: #52b788; }
-  .stat-box .sub {
-    font-size: 12px;
-    color: var(--muted);
-    margin-top: 2px;
-  }
-
-  /* SECTIONS */
-  .section {
-    display: none;
-    max-width: 900px;
-    margin: 0 auto;
-    padding: 0 24px 80px;
-    animation: fadeIn 0.3s ease;
-  }
-
-  .section.active { display: block; }
-
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  .section-title {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 48px;
-    letter-spacing: 2px;
-    margin-bottom: 8px;
-    margin-top: 48px;
-  }
-
-  .section-sub {
-    color: var(--muted);
-    font-size: 14px;
-    margin-bottom: 32px;
-  }
-
-  /* DAY TABS */
-  .day-tabs {
-    display: flex;
-    gap: 6px;
-    flex-wrap: wrap;
-    margin-bottom: 28px;
-  }
-
-  .day-tab {
-    background: var(--mid);
-    border: 1px solid var(--border);
-    color: var(--muted);
-    font-family: 'Space Mono', monospace;
-    font-size: 12px;
-    padding: 8px 16px;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-
-  .day-tab:hover { border-color: var(--accent); color: var(--white); }
-  .day-tab.active { background: var(--accent); border-color: var(--accent); color: var(--white); }
-
-  /* MEAL CARD */
-  .meal-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
     margin-bottom: 16px;
   }
 
-  @media (max-width: 600px) { .meal-grid { grid-template-columns: 1fr; } }
-
-  .meal-card {
-    background: var(--mid);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 20px;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .meal-card::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 3px;
-  }
-
-  .meal-card.siang::before { background: var(--accent3); }
-  .meal-card.snack::before { background: var(--accent2); }
-  .meal-card.malam::before { background: #5e60ce; }
-
-  .meal-time {
-    font-family: 'Space Mono', monospace;
-    font-size: 11px;
+  .hero-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(3rem, 10vw, 5.5rem);
+    line-height: 0.9;
     letter-spacing: 2px;
-    text-transform: uppercase;
-    margin-bottom: 10px;
-  }
-
-  .meal-time.siang { color: var(--accent3); }
-  .meal-time.snack { color: #52b788; }
-  .meal-time.malam { color: #a5a6f6; }
-
-  .meal-name {
-    font-size: 17px;
-    font-weight: 600;
-    margin-bottom: 8px;
-    line-height: 1.3;
-  }
-
-  .meal-items {
-    list-style: none;
     margin-bottom: 12px;
   }
 
-  .meal-items li {
-    font-size: 13px;
-    color: #aaa;
-    padding: 3px 0;
-    display: flex;
-    align-items: flex-start;
-    gap: 8px;
-    line-height: 1.4;
-  }
+  .hero-title span { color: var(--accent); }
 
-  .meal-items li::before {
-    content: '—';
-    color: var(--border);
-    flex-shrink: 0;
-    font-size: 11px;
-    margin-top: 1px;
-  }
-
-  .kal-badge {
-    display: inline-block;
-    background: var(--soft);
-    border: 1px solid var(--border);
-    border-radius: 20px;
-    padding: 3px 12px;
-    font-family: 'Space Mono', monospace;
-    font-size: 12px;
-    color: var(--white);
-  }
-
-  .tip-box {
-    background: #1a1a1a;
-    border: 1px solid var(--border);
-    border-left: 3px solid var(--accent);
-    border-radius: 8px;
-    padding: 12px 16px;
-    font-size: 13px;
-    color: #ccc;
-    margin-top: 16px;
-    line-height: 1.6;
-  }
-
-  .tip-box strong { color: var(--white); }
-
-  /* TOTAL HARI */
-  .day-total {
-    background: linear-gradient(135deg, #1a1a1a, var(--mid));
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 16px 20px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-top: 16px;
-  }
-
-  .day-total .label { font-size: 13px; color: var(--muted); }
-  .day-total .total-kal {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 28px;
-    color: var(--accent);
-    letter-spacing: 1px;
-  }
-
-  .day-total .deficit {
-    font-size: 13px;
-    color: #52b788;
-    text-align: right;
-  }
-
-  /* WORKOUT SECTION */
-  .phase-tabs {
-    display: flex;
-    gap: 8px;
-    margin-bottom: 28px;
-    flex-wrap: wrap;
-  }
-
-  .phase-tab {
-    background: var(--mid);
-    border: 1px solid var(--border);
+  .hero-sub {
     color: var(--muted);
-    font-size: 13px;
-    font-weight: 500;
-    padding: 8px 18px;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.2s;
+    font-size: 0.9rem;
+    font-family: 'JetBrains Mono', monospace;
   }
 
-  .phase-tab:hover { color: var(--white); }
-  .phase-tab.active { background: #2d6a4f; border-color: #52b788; color: var(--white); }
-
-  .wo-header {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    margin-bottom: 20px;
-  }
-
-  .wo-badge {
-    background: var(--accent);
-    color: var(--white);
-    font-family: 'Space Mono', monospace;
-    font-size: 11px;
-    padding: 4px 12px;
-    border-radius: 4px;
-  }
-
-  .wo-badge.green { background: #2d6a4f; }
-  .wo-badge.purple { background: #3d348b; }
-
-  .wo-week-grid {
+  /* STATS GRID */
+  .stats-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
     gap: 12px;
     margin-bottom: 20px;
   }
 
-  @media (max-width: 600px) { .wo-week-grid { grid-template-columns: 1fr 1fr; } }
+  @media (min-width: 600px) {
+    .stats-grid { grid-template-columns: repeat(4, 1fr); }
+  }
 
-  .wo-day-card {
-    background: var(--mid);
+  .stat-card {
+    background: var(--surface);
     border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 16px;
-  }
-
-  .wo-day-card.rest {
-    border-style: dashed;
-    opacity: 0.6;
-  }
-
-  .wo-day-label {
-    font-family: 'Space Mono', monospace;
-    font-size: 11px;
-    color: var(--muted);
-    letter-spacing: 1.5px;
-    margin-bottom: 8px;
-  }
-
-  .wo-day-name {
-    font-weight: 600;
-    font-size: 14px;
-    margin-bottom: 10px;
-  }
-
-  .wo-exercises {
-    list-style: none;
-  }
-
-  .wo-exercises li {
-    font-size: 12px;
-    color: #aaa;
-    padding: 4px 0;
-    border-bottom: 1px solid var(--border);
-    display: flex;
-    justify-content: space-between;
-  }
-
-  .wo-exercises li:last-child { border-bottom: none; }
-
-  .wo-exercises .reps {
-    font-family: 'Space Mono', monospace;
-    font-size: 11px;
-    color: var(--accent);
-  }
-
-  .wo-exercises .reps.green { color: #52b788; }
-
-  .duration-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    background: var(--soft);
-    border: 1px solid var(--border);
-    border-radius: 20px;
-    padding: 4px 12px;
-    font-size: 12px;
-    color: var(--muted);
-    margin-bottom: 12px;
-  }
-
-  /* PROGRESS SECTION */
-  .progress-timeline {
+    border-radius: 14px;
+    padding: 18px 16px;
+    text-align: center;
     position: relative;
-    padding-left: 32px;
+    overflow: hidden;
+    transition: transform 0.2s, border-color 0.2s;
   }
 
-  .progress-timeline::before {
+  .stat-card:hover {
+    transform: translateY(-3px);
+    border-color: var(--accent);
+  }
+
+  .stat-card::before {
     content: '';
     position: absolute;
-    left: 10px;
-    top: 0;
-    bottom: 0;
-    width: 2px;
-    background: var(--border);
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--accent);
+    border-radius: 14px 14px 0 0;
   }
 
-  .timeline-item {
-    position: relative;
-    margin-bottom: 28px;
-  }
+  .stat-card.green::before { background: var(--accent3); }
+  .stat-card.yellow::before { background: var(--accent2); }
+  .stat-card.blue::before { background: #4facfe; }
 
-  .timeline-dot {
-    position: absolute;
-    left: -28px;
-    top: 4px;
-    width: 14px;
-    height: 14px;
-    border-radius: 50%;
-    border: 2px solid var(--accent);
-    background: var(--black);
-  }
-
-  .timeline-dot.done { background: var(--accent); }
-  .timeline-dot.green { border-color: #52b788; }
-  .timeline-dot.green.done { background: #52b788; }
-
-  .timeline-month {
+  .stat-num {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 22px;
-    letter-spacing: 2px;
-    margin-bottom: 8px;
+    font-size: 2rem;
+    line-height: 1;
+    color: var(--accent);
   }
+  .stat-card.green .stat-num { color: var(--accent3); }
+  .stat-card.yellow .stat-num { color: var(--accent2); }
+  .stat-card.blue .stat-num { color: #4facfe; }
 
-  .timeline-card {
-    background: var(--mid);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 16px 20px;
-  }
-
-  .timeline-stats {
-    display: flex;
-    gap: 24px;
-    margin-bottom: 12px;
-    flex-wrap: wrap;
-  }
-
-  .ts-item .ts-label {
-    font-size: 11px;
+  .stat-label {
+    font-size: 0.7rem;
     color: var(--muted);
-    font-family: 'Space Mono', monospace;
+    text-transform: uppercase;
     letter-spacing: 1px;
+    margin-top: 4px;
   }
 
-  .ts-item .ts-val {
-    font-size: 20px;
-    font-family: 'Bebas Neue', sans-serif;
-    letter-spacing: 1px;
-  }
-
-  .ts-item .ts-val.orange { color: var(--accent); }
-  .ts-item .ts-val.green { color: #52b788; }
-
-  .change-pills {
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-  }
-
-  .pill {
-    background: #1a2a1a;
-    border: 1px solid #2d6a4f;
-    color: #52b788;
-    font-size: 12px;
-    padding: 3px 10px;
-    border-radius: 20px;
-  }
-
-  .pill.orange {
-    background: #2a1a0a;
-    border-color: #a0440a;
-    color: var(--accent3);
-  }
-
-  /* RULES SECTION */
-  .rules-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
-  }
-
-  @media (max-width: 600px) { .rules-grid { grid-template-columns: 1fr; } }
-
-  .rule-card {
-    background: var(--mid);
+  /* CARDS */
+  .card {
+    background: var(--surface);
     border: 1px solid var(--border);
     border-radius: 16px;
     padding: 20px;
+    margin-bottom: 16px;
+    transition: border-color 0.2s;
   }
 
-  .rule-icon {
-    font-size: 28px;
+  .card:hover { border-color: rgba(255,107,53,0.4); }
+
+  .card-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.3rem;
+    letter-spacing: 1px;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .card-title .icon {
+    width: 32px; height: 32px;
+    display: flex; align-items: center; justify-content: center;
+    background: var(--surface2);
+    border-radius: 8px;
+    font-size: 1rem;
+  }
+
+  /* IF TIMELINE */
+  .if-timeline {
+    display: flex;
+    gap: 4px;
+    margin: 16px 0;
+    border-radius: 10px;
+    overflow: hidden;
+    height: 40px;
+  }
+
+  .if-fast {
+    flex: 16;
+    background: linear-gradient(135deg, #1a1a2e, #16213e);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: #4facfe;
+    letter-spacing: 1px;
+    gap: 6px;
+  }
+
+  .if-eat {
+    flex: 8;
+    background: linear-gradient(135deg, var(--accent), #ff9f43);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: #000;
+    letter-spacing: 1px;
+    gap: 6px;
+  }
+
+  /* MEAL PLAN */
+  .day-tabs {
+    display: flex;
+    gap: 6px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    padding-bottom: 4px;
+    margin-bottom: 16px;
+  }
+  .day-tabs::-webkit-scrollbar { display: none; }
+
+  .day-btn {
+    padding: 6px 14px;
+    border-radius: 8px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    cursor: pointer;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    background: var(--surface2);
+    transition: all 0.2s;
+    white-space: nowrap;
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  .day-btn.active {
+    background: var(--accent);
+    color: #000;
+    border-color: var(--accent);
+  }
+
+  .meal-card {
+    display: none;
+    animation: fadeIn 0.3s ease;
+  }
+  .meal-card.active { display: block; }
+
+  .meal-row {
+    display: flex;
+    gap: 12px;
     margin-bottom: 10px;
+    padding: 14px;
+    background: var(--surface2);
+    border-radius: 12px;
+    border-left: 3px solid var(--accent);
+    align-items: flex-start;
   }
 
-  .rule-title {
-    font-weight: 600;
-    font-size: 15px;
+  .meal-row.snack { border-left-color: var(--accent3); }
+  .meal-row.dinner { border-left-color: var(--accent2); }
+
+  .meal-time {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--muted);
+    min-width: 50px;
+    padding-top: 2px;
+  }
+
+  .meal-info { flex: 1; }
+  .meal-name { font-weight: 600; font-size: 0.85rem; margin-bottom: 4px; }
+  .meal-items { font-size: 0.78rem; color: var(--muted); line-height: 1.5; }
+
+  .meal-kcal {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.1rem;
+    color: var(--accent);
+    white-space: nowrap;
+  }
+
+  .meal-row.snack .meal-kcal { color: var(--accent3); }
+  .meal-row.dinner .meal-kcal { color: var(--accent2); }
+
+  .day-total {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    background: linear-gradient(135deg, rgba(255,107,53,0.15), rgba(255,107,53,0.05));
+    border: 1px solid rgba(255,107,53,0.3);
+    border-radius: 10px;
+    margin-top: 10px;
+  }
+
+  .day-total-label { font-size: 0.8rem; font-weight: 600; }
+  .day-total-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.5rem;
+    color: var(--accent);
+  }
+
+  /* WORKOUT */
+  .week-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 6px;
+    margin-bottom: 20px;
+  }
+
+  @media (max-width: 500px) {
+    .week-grid { grid-template-columns: repeat(4, 1fr); }
+  }
+
+  .week-day {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 10px 6px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .week-day:hover { transform: translateY(-2px); }
+
+  .week-day.push { border-color: var(--push); }
+  .week-day.pull { border-color: var(--pull); }
+  .week-day.legs { border-color: var(--legs); }
+  .week-day.full { border-color: var(--full); }
+  .week-day.rest { border-color: var(--rest); opacity: 0.5; }
+  .week-day.active-day { box-shadow: 0 0 0 2px var(--accent); }
+
+  .week-day-name {
+    font-size: 0.6rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 4px;
+  }
+
+  .week-day-emoji { font-size: 1.2rem; margin-bottom: 4px; }
+
+  .week-day-type {
+    font-size: 0.55rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+
+  .week-day.push .week-day-type { color: var(--push); }
+  .week-day.pull .week-day-type { color: var(--pull); }
+  .week-day.legs .week-day-type { color: var(--legs); }
+  .week-day.full .week-day-type { color: var(--full); }
+  .week-day.rest .week-day-type { color: var(--rest); }
+
+  .workout-detail {
+    display: none;
+    animation: fadeIn 0.3s ease;
+  }
+  .workout-detail.active { display: block; }
+
+  .exercise-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .exercise-table th {
+    text-align: left;
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--muted);
+    padding: 8px 10px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .exercise-table td {
+    padding: 10px 10px;
+    font-size: 0.82rem;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    vertical-align: top;
+  }
+
+  .exercise-table tr:last-child td { border-bottom: none; }
+
+  .exercise-table tr:hover td { background: rgba(255,255,255,0.02); }
+
+  .sets-badge {
+    display: inline-block;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 2px 8px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--accent);
+    white-space: nowrap;
+  }
+
+  /* ROADMAP */
+  .roadmap-phases {
+    display: grid;
+    gap: 14px;
+  }
+
+  .phase-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 18px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .phase-card::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 4px;
+  }
+
+  .phase-card.p1::before { background: #4facfe; }
+  .phase-card.p2::before { background: var(--accent); }
+  .phase-card.p3::before { background: var(--accent3); }
+
+  .phase-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 12px;
+  }
+
+  .phase-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.2rem;
+    letter-spacing: 1px;
+  }
+
+  .phase-badge {
+    font-size: 0.65rem;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 6px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .phase-card.p1 .phase-badge { background: rgba(79,172,254,0.15); color: #4facfe; }
+  .phase-card.p2 .phase-badge { background: rgba(255,107,53,0.15); color: var(--accent); }
+  .phase-card.p3 .phase-badge { background: rgba(6,255,165,0.15); color: var(--accent3); }
+
+  .skill-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 10px;
+  }
+
+  .chip {
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 0.72rem;
+    font-weight: 500;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+  }
+
+  .chip.done { border-color: var(--accent3); color: var(--accent3); }
+  .chip.target { border-color: var(--accent); color: var(--accent); }
+
+  /* PROGRESS / CHECKLIST */
+  .checklist-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 14px;
+    background: var(--surface2);
+    border-radius: 10px;
     margin-bottom: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: 1px solid transparent;
+    user-select: none;
   }
 
-  .rule-text {
-    font-size: 13px;
-    color: #aaa;
-    line-height: 1.6;
+  .checklist-item:hover { border-color: var(--border); }
+  .checklist-item.checked { background: rgba(6,255,165,0.07); border-color: rgba(6,255,165,0.2); }
+
+  .check-box {
+    width: 22px; height: 22px;
+    border-radius: 6px;
+    border: 2px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    transition: all 0.2s;
+    font-size: 0.8rem;
   }
 
-  .divider {
-    height: 1px;
-    background: var(--border);
-    margin: 32px 0;
+  .checklist-item.checked .check-box {
+    background: var(--accent3);
+    border-color: var(--accent3);
+    color: #000;
   }
 
-  .full-card {
-    grid-column: 1 / -1;
+  .check-label { font-size: 0.85rem; flex: 1; }
+  .checklist-item.checked .check-label {
+    text-decoration: line-through;
+    color: var(--muted);
   }
 
-  .avoid-list {
+  /* PROGRESS BAR */
+  .progress-wrap {
+    margin: 20px 0;
+  }
+
+  .progress-label {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 6px;
+    font-size: 0.78rem;
+    color: var(--muted);
+  }
+
+  .progress-bar {
+    height: 8px;
+    background: var(--surface2);
+    border-radius: 100px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    border-radius: 100px;
+    transition: width 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  /* TIPS */
+  .tip-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  @media (min-width: 600px) {
+    .tip-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  .tip-item {
+    display: flex;
+    gap: 12px;
+    padding: 14px;
+    background: var(--surface2);
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    align-items: flex-start;
+    transition: border-color 0.2s;
+  }
+
+  .tip-item:hover { border-color: rgba(255,107,53,0.4); }
+
+  .tip-icon {
+    font-size: 1.4rem;
+    flex-shrink: 0;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--surface);
+    border-radius: 8px;
+  }
+
+  .tip-text { font-size: 0.82rem; line-height: 1.5; }
+  .tip-text strong { color: var(--text); display: block; margin-bottom: 2px; }
+  .tip-text span { color: var(--muted); }
+
+  /* WARNING BANNER */
+  .warning-banner {
+    background: linear-gradient(135deg, rgba(255,64,64,0.1), rgba(255,64,64,0.05));
+    border: 1px solid rgba(255,64,64,0.3);
+    border-radius: 12px;
+    padding: 14px 16px;
+    margin-bottom: 16px;
+    font-size: 0.82rem;
+    line-height: 1.5;
+    color: #ff8080;
+  }
+
+  .warning-banner strong { color: #ff4040; }
+
+  /* HYDRATION TRACKER */
+  .water-glasses {
     display: flex;
     gap: 8px;
     flex-wrap: wrap;
     margin-top: 10px;
   }
 
-  .avoid-pill {
-    background: #2a0a0a;
-    border: 1px solid #6b2222;
-    color: #ff6b6b;
-    font-size: 12px;
-    padding: 4px 12px;
-    border-radius: 20px;
+  .glass {
+    width: 40px; height: 40px;
+    border-radius: 8px;
+    border: 2px solid var(--border);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    transition: all 0.2s;
+    background: var(--surface2);
+  }
+
+  .glass.filled {
+    background: rgba(79,172,254,0.2);
+    border-color: #4facfe;
+    animation: dropIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  @keyframes dropIn {
+    from { transform: scale(0.6); }
+    to { transform: scale(1); }
+  }
+
+  /* WEIGHT LOG */
+  .weight-input-row {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+
+  .weight-input-row input {
+    flex: 1;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 10px 14px;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    font-family: 'DM Sans', sans-serif;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .weight-input-row input:focus { border-color: var(--accent); }
+
+  .btn-primary {
+    background: var(--accent);
+    color: #000;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 0.85rem;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    transition: transform 0.15s, opacity 0.15s;
+    white-space: nowrap;
+  }
+
+  .btn-primary:hover { transform: translateY(-1px); opacity: 0.9; }
+  .btn-primary:active { transform: scale(0.97); }
+
+  .weight-log {
+    max-height: 200px;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: var(--border) transparent;
+  }
+
+  .weight-entry {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 12px;
+    background: var(--surface2);
+    border-radius: 8px;
+    margin-bottom: 6px;
+    font-size: 0.82rem;
+  }
+
+  .weight-entry-date { color: var(--muted); font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; }
+  .weight-entry-val { font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; color: var(--accent3); }
+
+  .delete-btn {
+    background: none;
+    border: none;
+    color: var(--muted);
+    cursor: pointer;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    transition: color 0.2s;
+  }
+
+  .delete-btn:hover { color: var(--danger); }
+
+  /* CALORIE INFO BOX */
+  .calorie-box {
+    background: linear-gradient(135deg, var(--surface2), #1a1a2e);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px;
+    margin-bottom: 16px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .calorie-box::after {
+    content: '🔥';
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 3rem;
+    opacity: 0.1;
+  }
+
+  .calorie-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    font-size: 0.83rem;
+  }
+
+  .calorie-row:last-child { border-bottom: none; }
+  .calorie-row span:first-child { color: var(--muted); }
+  .calorie-row span:last-child { font-weight: 600; font-family: 'JetBrains Mono', monospace; }
+
+  .calorie-highlight {
+    background: rgba(255,107,53,0.1);
+    border-radius: 8px;
+    padding: 10px 14px;
+    margin-top: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .calorie-highlight span:first-child { font-weight: 700; }
+  .calorie-highlight span:last-child {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.6rem;
+    color: var(--accent);
+  }
+
+  /* DIVIDER */
+  .divider {
+    height: 1px;
+    background: var(--border);
+    margin: 16px 0;
+  }
+
+  /* SECTION TITLE */
+  .section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(1.8rem, 6vw, 2.5rem);
+    letter-spacing: 2px;
+    margin-bottom: 6px;
+  }
+
+  .section-sub {
+    color: var(--muted);
+    font-size: 0.82rem;
+    margin-bottom: 24px;
+  }
+
+  /* TAG */
+  .tag {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 6px;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+
+  .tag.orange { background: rgba(255,107,53,0.15); color: var(--accent); }
+  .tag.green { background: rgba(6,255,165,0.12); color: var(--accent3); }
+  .tag.yellow { background: rgba(255,210,63,0.12); color: var(--accent2); }
+  .tag.blue { background: rgba(79,172,254,0.12); color: #4facfe; }
+
+  /* SCROLL TOP */
+  .scroll-top {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 40px; height: 40px;
+    background: var(--accent);
+    color: #000;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    opacity: 0;
+    transition: opacity 0.3s, transform 0.2s;
+    transform: translateY(10px);
+  }
+
+  .scroll-top.visible { opacity: 1; transform: translateY(0); }
+
+  /* FLOATING CALORIE COUNTER */
+  .float-info {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 8px 14px;
+    font-size: 0.72rem;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    backdrop-filter: blur(10px);
+  }
+
+  .float-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--accent3);
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 480px) {
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    .exercise-table th:nth-child(3),
+    .exercise-table td:nth-child(3) { display: none; }
   }
 </style>
 </head>
 <body>
 
-<header>
-  <div class="logo">LEANPLAN</div>
-  <nav>
-    <button class="active" onclick="showSection('overview')">Overview</button>
-    <button onclick="showSection('meal')">🍽 Makan</button>
-    <button onclick="showSection('workout')">💪 Workout</button>
-    <button onclick="showSection('progress')">📈 Progress</button>
-    <button onclick="showSection('rules')">📋 Rules</button>
-  </nav>
-</header>
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">DAVID.FIT</div>
+  <div class="nav-tabs">
+    <button class="nav-tab active" onclick="showSection('dashboard')">📊 Dashboard</button>
+    <button class="nav-tab" onclick="showSection('kalori')">🔥 Kalori</button>
+    <button class="nav-tab" onclick="showSection('if')">⏰ IF 16:8</button>
+    <button class="nav-tab" onclick="showSection('mealplan')">🍽️ Meal Plan</button>
+    <button class="nav-tab" onclick="showSection('workout')">💪 Workout</button>
+    <button class="nav-tab" onclick="showSection('roadmap')">🗺️ Roadmap</button>
+    <button class="nav-tab" onclick="showSection('tracker')">📈 Tracker</button>
+    <button class="nav-tab" onclick="showSection('tips')">💡 Tips</button>
+  </div>
+</nav>
 
-<!-- OVERVIEW -->
-<div id="sec-overview" class="section active">
-  <div class="hero">
-    <div class="hero-tag">Target Aktif • 90kg → 70kg</div>
-    <h1>DROP<br><span>20KG</span></h1>
-    <p>Plan makan warteg + workout kos tanpa alat, dirancang khusus untuk kondisi lo: puasa pagi, snack sore, workout ≤30 menit, 6x seminggu selama 6 bulan.</p>
+<!-- ===== DASHBOARD ===== -->
+<section id="dashboard" class="section active">
+  <div class="hero-header">
+    <div class="hero-tag">Program Personal · David · 2024</div>
+    <div class="hero-title">DAVID<br><span>FIT</span><br>PROGRAM</div>
+    <div class="hero-sub">87kg → Target 77kg · IF 16:8 · Bodyweight → Calisthenics</div>
+  </div>
 
-    <div class="stats-row">
-      <div class="stat-box">
-        <div class="label">BB Sekarang</div>
-        <div class="value orange">90 KG</div>
-        <div class="sub">BMI 31.1 — Obese I</div>
-      </div>
-      <div class="stat-box">
-        <div class="label">BB Target</div>
-        <div class="value green">70 KG</div>
-        <div class="sub">BMI 24.2 — Normal ✓</div>
-      </div>
-      <div class="stat-box">
-        <div class="label">Kalori Harian</div>
-        <div class="value orange">1.700</div>
-        <div class="sub">Defisit ~1.000 kal/hari</div>
-      </div>
-      <div class="stat-box">
-        <div class="label">Durasi</div>
-        <div class="value green">6 BLN</div>
-        <div class="sub">24 minggu konsisten</div>
-      </div>
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-num">87</div>
+      <div class="stat-label">BB Saat Ini (kg)</div>
+    </div>
+    <div class="stat-card green">
+      <div class="stat-num">77</div>
+      <div class="stat-label">Target BB (kg)</div>
+    </div>
+    <div class="stat-card yellow">
+      <div class="stat-num">30.1</div>
+      <div class="stat-label">BMI Sekarang</div>
+    </div>
+    <div class="stat-card blue">
+      <div class="stat-num">1500</div>
+      <div class="stat-label">Target Kalori/Hari</div>
     </div>
   </div>
 
-  <div style="max-width:900px;margin:0 auto;padding:0 24px 60px;">
-    <div class="divider"></div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
-      <div class="meal-card" style="cursor:pointer" onclick="showSection('meal')">
-        <div class="meal-time siang">🍽 Rencana Makan</div>
-        <div class="meal-name">7-hari menu warteg<br>+ snack sore</div>
-        <p style="font-size:13px;color:#888;margin-top:8px;">Siang ~600 kal · Snack ~200 kal · Malam ~400 kal</p>
-        <div style="margin-top:12px;font-size:12px;color:var(--accent)">Lihat detail →</div>
-      </div>
-      <div class="meal-card" style="cursor:pointer" onclick="showSection('workout')">
-        <div class="meal-time snack">💪 Program Workout</div>
-        <div class="meal-name">6x/minggu · ≤30 menit<br>No equipment</div>
-        <p style="font-size:13px;color:#888;margin-top:8px;">3 fase berbeda selama 6 bulan · Progresif</p>
-        <div style="margin-top:12px;font-size:12px;color:#52b788">Lihat detail →</div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- MEAL SECTION -->
-<div id="sec-meal" class="section">
-  <div class="section-title">RENCANA MAKAN</div>
-  <div class="section-sub">Siang · Snack Sore · Malam — Total ~1.700 kal/hari · Puasa pagi</div>
-
-  <div class="day-tabs" id="dayTabs">
-    <button class="day-tab active" onclick="showDay(0)">Sen</button>
-    <button class="day-tab" onclick="showDay(1)">Sel</button>
-    <button class="day-tab" onclick="showDay(2)">Rab</button>
-    <button class="day-tab" onclick="showDay(3)">Kam</button>
-    <button class="day-tab" onclick="showDay(4)">Jum</button>
-    <button class="day-tab" onclick="showDay(5)">Sab</button>
-    <button class="day-tab" onclick="showDay(6)">Min</button>
-  </div>
-
-  <div id="dayContent"></div>
-</div>
-
-<!-- WORKOUT SECTION -->
-<div id="sec-workout" class="section">
-  <div class="section-title">PROGRAM WORKOUT</div>
-  <div class="section-sub">No equipment · Di kamar kos · ≤30 menit · 6x seminggu · 6 bulan progresif</div>
-
-  <div class="phase-tabs" id="phaseTabs">
-    <button class="phase-tab active" onclick="showPhase(0)">Fase 1 · Bln 1–2</button>
-    <button class="phase-tab" onclick="showPhase(1)">Fase 2 · Bln 3–4</button>
-    <button class="phase-tab" onclick="showPhase(2)">Fase 3 · Bln 5–6</button>
-  </div>
-
-  <div id="phaseContent"></div>
-</div>
-
-<!-- PROGRESS SECTION -->
-<div id="sec-progress" class="section">
-  <div class="section-title">PROYEKSI PROGRESS</div>
-  <div class="section-sub">Estimasi penurunan BB per bulan — konsisten diet + workout</div>
-
-  <div class="progress-timeline" id="progressTimeline"></div>
-</div>
-
-<!-- RULES SECTION -->
-<div id="sec-rules" class="section">
-  <div class="section-title">ATURAN WAJIB</div>
-  <div class="section-sub">Ini yang bikin program lo berhasil atau gagal</div>
-
-  <div class="rules-grid">
-    <div class="rule-card">
-      <div class="rule-icon">💧</div>
-      <div class="rule-title">Minum Air Putih</div>
-      <div class="rule-text">Minimal 3 liter per hari. Saat puasa pagi, wajib minum 1-2 gelas air setelah bangun. Gantikan semua minuman manis. Sering lapar padahal itu dehidrasi.</div>
-    </div>
-    <div class="rule-card">
-      <div class="rule-icon">😴</div>
-      <div class="rule-title">Tidur 7–8 Jam</div>
-      <div class="rule-text">Kurang tidur meningkatkan hormon ghrelin (lapar) dan cortisol (simpan lemak). Tidur adalah bagian dari diet, bukan opsional.</div>
-    </div>
-    <div class="rule-card">
-      <div class="rule-icon">📱</div>
-      <div class="rule-title">Tracking Mudah</div>
-      <div class="rule-text">Install <strong>MyFitnessPal</strong>. Foto makanan → search nama warteg → input. Atau cukup hitung: siang + snack + malam harus di bawah 1.800 kal. Tidak perlu sempurna, cukup konsisten.</div>
-    </div>
-    <div class="rule-card">
-      <div class="rule-icon">🚫</div>
-      <div class="rule-title">Pantangan Utama</div>
-      <div class="rule-text">Ini yang paling sering sabotase diet anak kos:</div>
-      <div class="avoid-list">
-        <span class="avoid-pill">Es teh manis</span>
-        <span class="avoid-pill">Boba / kopi susu</span>
-        <span class="avoid-pill">Gorengan tiap hari</span>
-        <span class="avoid-pill">Mie instan malam</span>
-        <span class="avoid-pill">Nasi 2x malam</span>
-        <span class="avoid-pill">Snack kantong</span>
-      </div>
-    </div>
-    <div class="rule-card full-card">
-      <div class="rule-icon">⏰</div>
-      <div class="rule-title">Timing Makan & Puasa Pagi</div>
-      <div class="rule-text" style="line-height:2">
-        Karena lo puasa pagi (Intermittent Fasting), window makan lo adalah <strong>12.00 – 20.00</strong>.<br>
-        Urutan: <strong>Siang (12:00–13:00)</strong> → <strong>Snack Sore (15:00–16:00)</strong> → <strong>Malam (18:00–19:30)</strong><br>
-        Workout idealnya dilakukan <strong>jam 16:00–18:00</strong> setelah snack, atau <strong>sebelum makan siang</strong>.
-      </div>
-    </div>
-    <div class="rule-card full-card">
-      <div class="rule-icon">📏</div>
-      <div class="rule-title">Ukuran Porsi Tanpa Timbangan</div>
-      <div class="rules-grid" style="margin-top:10px;gap:8px">
-        <div style="background:var(--soft);border-radius:8px;padding:10px 14px">
-          <div style="font-size:12px;color:var(--muted);margin-bottom:4px">NASI</div>
-          <div style="font-size:13px">Segepok tangan = ~100g = ½ piring</div>
+  <div class="card">
+    <div class="card-title"><div class="icon">🎯</div> Ringkasan Program</div>
+    <div class="tip-grid">
+      <div class="tip-item">
+        <div class="tip-icon">⚖️</div>
+        <div class="tip-text">
+          <strong>Target Realistis</strong>
+          <span>3–4 kg/bulan dengan defisit 700–800 kkal/hari secara aman</span>
         </div>
-        <div style="background:var(--soft);border-radius:8px;padding:10px 14px">
-          <div style="font-size:12px;color:var(--muted);margin-bottom:4px">PROTEIN (ayam/ikan/tempe)</div>
-          <div style="font-size:13px">Sebesar telapak tangan lo</div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-icon">⏰</div>
+        <div class="tip-text">
+          <strong>IF 16:8</strong>
+          <span>Makan 12.00–20.00 · Puasa sisanya</span>
         </div>
-        <div style="background:var(--soft);border-radius:8px;padding:10px 14px">
-          <div style="font-size:12px;color:var(--muted);margin-bottom:4px">SAYUR</div>
-          <div style="font-size:13px">Bebas, penuhi ½ piring</div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-icon">🍽️</div>
+        <div class="tip-text">
+          <strong>Meal Plan Warteg</strong>
+          <span>Budget Rp 30.000–40.000/hari, mudah ditemukan</span>
         </div>
-        <div style="background:var(--soft);border-radius:8px;padding:10px 14px">
-          <div style="font-size:12px;color:var(--muted);margin-bottom:4px">MINYAK / SANTAN</div>
-          <div style="font-size:13px">Sebesar 1 ibu jari = cukup</div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-icon">💪</div>
+        <div class="tip-text">
+          <strong>Workout 6x/Minggu</strong>
+          <span>Bodyweight dasar → Calisthenics dalam 6 bulan</span>
+        </div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-icon">🚶</div>
+        <div class="tip-text">
+          <strong>5.000+ Steps/Hari</strong>
+          <span>Jalan kaki = +300–350 kkal terbakar extra</span>
+        </div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-icon">📅</div>
+        <div class="tip-text">
+          <strong>3 Bulan = 7–10 kg</strong>
+          <span>Konsisten meal plan + workout + jalan kaki</span>
         </div>
       </div>
     </div>
   </div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon">📅</div> Estimasi Progress 3 Bulan</div>
+    <div style="display:grid; gap: 10px;">
+      <div>
+        <div class="progress-label"><span>Bulan 1 (3–4 kg)</span><span style="color:var(--accent)">~87 → 83 kg</span></div>
+        <div class="progress-bar"><div class="progress-fill" style="width:40%"></div></div>
+      </div>
+      <div>
+        <div class="progress-label"><span>Bulan 2 (2–3 kg)</span><span style="color:var(--accent2)">~83 → 80 kg</span></div>
+        <div class="progress-bar"><div class="progress-fill" style="width:70%;background:linear-gradient(90deg,var(--accent),var(--accent2))"></div></div>
+      </div>
+      <div>
+        <div class="progress-label"><span>Bulan 3 (2–3 kg)</span><span style="color:var(--accent3)">~80 → 77 kg ✅</span></div>
+        <div class="progress-bar"><div class="progress-fill" style="width:100%;background:linear-gradient(90deg,var(--accent),var(--accent3))"></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== KALORI ===== -->
+<section id="kalori" class="section">
+  <div class="section-title">🔥 KALORI & NUTRISI</div>
+  <div class="section-sub">Perhitungan berdasarkan data tubuh kamu</div>
+
+  <div class="calorie-box">
+    <div class="calorie-row">
+      <span>BB / TB / Usia</span>
+      <span>87 kg / 170 cm / 20 thn</span>
+    </div>
+    <div class="calorie-row">
+      <span>BMR (Mifflin-St Jeor)</span>
+      <span>1.937 kkal</span>
+    </div>
+    <div class="calorie-row">
+      <span>TDEE (Sedentary ×1.2)</span>
+      <span>2.324 kkal</span>
+    </div>
+    <div class="calorie-row">
+      <span>Defisit target</span>
+      <span>700–800 kkal/hari</span>
+    </div>
+    <div class="calorie-highlight">
+      <span>Target Kalori Harian</span>
+      <span>1.500–1.600 kkal</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon">🥩</div> Distribusi Makronutrien</div>
+    <div style="display:grid; gap:10px;">
+      <div>
+        <div class="progress-label"><span>Protein (30%) — ~113–120g</span><span>~480 kkal</span></div>
+        <div class="progress-bar"><div class="progress-fill" style="width:30%;background:#4facfe"></div></div>
+      </div>
+      <div>
+        <div class="progress-label"><span>Karbohidrat (45%) — ~170–180g</span><span>~720 kkal</span></div>
+        <div class="progress-bar"><div class="progress-fill" style="width:45%;background:var(--accent2)"></div></div>
+      </div>
+      <div>
+        <div class="progress-label"><span>Lemak (25%) — ~40–45g</span><span>~375 kkal</span></div>
+        <div class="progress-bar"><div class="progress-fill" style="width:25%;background:var(--accent)"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon">⚡</div> Pembakaran Kalori Harian</div>
+    <div style="display:grid; gap:8px;">
+      <div class="tip-item">
+        <div class="tip-icon">🧍</div>
+        <div class="tip-text"><strong>Metabolisme Basal</strong><span>~1.937 kkal — tubuh bakar ini bahkan saat tidur</span></div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-icon">🚶</div>
+        <div class="tip-text"><strong>5.000 Langkah</strong><span>~300–350 kkal extra terbakar per hari</span></div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-icon">💪</div>
+        <div class="tip-text"><strong>Bodyweight Workout</strong><span>~150–250 kkal per sesi (30–45 menit)</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="warning-banner">
+    ⚠️ <strong>Catatan:</strong> Target 5 kg/bulan memerlukan defisit ~1.250 kkal/hari — terlalu ekstrem dan berisiko kehilangan otot. Program ini dirancang dengan defisit aman <strong>700–800 kkal/hari</strong> untuk turun <strong>3–4 kg/bulan</strong> sambil tetap menjaga massa otot dan energi kuliah.
+  </div>
+</section>
+
+<!-- ===== IF ===== -->
+<section id="if" class="section">
+  <div class="section-title">⏰ INTERMITTENT FASTING</div>
+  <div class="section-sub">Protokol 16:8 — Makan 12.00–20.00</div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon">📊</div> Jadwal Harian</div>
+    <div class="if-timeline">
+      <div class="if-fast">🌙 PUASA 16 JAM<br><span style="font-size:0.6rem;opacity:0.7">20.00 – 12.00</span></div>
+      <div class="if-eat">🍽️ MAKAN 8 JAM<br><span style="font-size:0.6rem;opacity:0.7">12.00 – 20.00</span></div>
+    </div>
+
+    <div style="display:grid; gap:8px; margin-top: 14px;">
+      <div class="meal-row" style="border-left-color: #4facfe;">
+        <div class="meal-time">06.00–11.59</div>
+        <div class="meal-info">
+          <div class="meal-name">🌙 Zona Puasa</div>
+          <div class="meal-items">Air putih, kopi hitam tanpa gula, teh tanpa gula</div>
+        </div>
+        <div class="meal-kcal" style="color:#4facfe">0 kkal</div>
+      </div>
+      <div class="meal-row">
+        <div class="meal-time">12.00</div>
+        <div class="meal-info">
+          <div class="meal-name">🍽️ Makan Pertama (Terbesar)</div>
+          <div class="meal-items">Nasi + protein + sayur — porsi terbesar di sini</div>
+        </div>
+        <div class="meal-kcal">~600 kkal</div>
+      </div>
+      <div class="meal-row snack">
+        <div class="meal-time">15.00–16.00</div>
+        <div class="meal-info">
+          <div class="meal-name">🥚 Snack</div>
+          <div class="meal-items">Telur rebus / tahu polos / pisang / kacang rebus</div>
+        </div>
+        <div class="meal-kcal">~100–140 kkal</div>
+      </div>
+      <div class="meal-row dinner">
+        <div class="meal-time">19.00–20.00</div>
+        <div class="meal-info">
+          <div class="meal-name">🌙 Makan Terakhir</div>
+          <div class="meal-items">Nasi ½ centong + lauk + sayur — lebih ringan dari siang</div>
+        </div>
+        <div class="meal-kcal">~400–450 kkal</div>
+      </div>
+      <div class="meal-row" style="border-left-color: #7070a0;">
+        <div class="meal-time">20.00+</div>
+        <div class="meal-info">
+          <div class="meal-name">🔒 Puasa Dimulai Lagi</div>
+          <div class="meal-items">Hanya air putih/teh. Kalau begadang lapar → minum air hangat</div>
+        </div>
+        <div class="meal-kcal" style="color:var(--muted)">0 kkal</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon">✅</div> Boleh Saat Puasa</div>
+    <div class="tip-grid">
+      <div class="tip-item">
+        <div class="tip-icon">💧</div>
+        <div class="tip-text"><strong>Air Putih</strong><span>Sebanyak-banyaknya</span></div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-icon">☕</div>
+        <div class="tip-text"><strong>Kopi Hitam</strong><span>Tanpa gula & creamer</span></div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-icon">🍵</div>
+        <div class="tip-text"><strong>Teh Tawar</strong><span>Teh hijau atau teh biasa</span></div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-icon">🧃</div>
+        <div class="tip-text"><strong>Elektrolit</strong><span>Air mineral / suplemen tanpa kalori</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon">🚫</div> Hindari Saat Puasa</div>
+    <div style="display:grid; gap:8px;">
+      <div class="tip-item" style="border-left: 3px solid var(--danger);">
+        <div class="tip-icon">🧋</div>
+        <div class="tip-text"><strong style="color:var(--danger)">Minuman Manis / Boba</strong><span>Langsung busting puasa + lonjakan insulin</span></div>
+      </div>
+      <div class="tip-item" style="border-left: 3px solid var(--danger);">
+        <div class="tip-icon">🍬</div>
+        <div class="tip-text"><strong style="color:var(--danger)">Permen / Snack</strong><span>Bahkan kalori kecil tetap break puasa</span></div>
+      </div>
+      <div class="tip-item" style="border-left: 3px solid var(--danger);">
+        <div class="tip-icon">🥛</div>
+        <div class="tip-text"><strong style="color:var(--danger)">Susu / Kopi Susu</strong><span>Kalori dari lemak & protein</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== MEAL PLAN ===== -->
+<section id="mealplan" class="section">
+  <div class="section-title">🍽️ MEAL PLAN 7 HARI</div>
+  <div class="section-sub">Warteg & makanan luar · Budget Rp 30.000–40.000/hari</div>
+
+  <div class="card" style="background:linear-gradient(135deg,rgba(255,107,53,0.08),var(--surface)); border-color:rgba(255,107,53,0.3);">
+    <div style="font-size:0.82rem; color:var(--muted); line-height:1.6;">
+      💡 <strong style="color:var(--text)">Tips Order di Warteg:</strong> "Bang, nasinya ½ porsi aja, tambahin sayurnya ya" — biasanya gratis atau +Rp 2.000. Selalu mulai makan dengan sayur dulu!
+    </div>
+  </div>
+
+  <div class="day-tabs">
+    <button class="day-btn active" onclick="showDay(1)">Sen</button>
+    <button class="day-btn" onclick="showDay(2)">Sel</button>
+    <button class="day-btn" onclick="showDay(3)">Rab</button>
+    <button class="day-btn" onclick="showDay(4)">Kam</button>
+    <button class="day-btn" onclick="showDay(5)">Jum</button>
+    <button class="day-btn" onclick="showDay(6)">Sab</button>
+    <button class="day-btn" onclick="showDay(7)">Min 🎉</button>
+  </div>
+
+  <!-- Day 1 -->
+  <div id="day-1" class="meal-card active">
+    <div class="meal-row">
+      <div class="meal-time">12.00</div>
+      <div class="meal-info">
+        <div class="meal-name">Makan Pertama 🍚</div>
+        <div class="meal-items">Nasi putih 1 centong · Ayam goreng tanpa kulit · Sayur bayam bening · Tempe goreng</div>
+      </div>
+      <div class="meal-kcal">~600 kkal</div>
+    </div>
+    <div class="meal-row snack">
+      <div class="meal-time">15.00</div>
+      <div class="meal-info">
+        <div class="meal-name">Snack 🥚</div>
+        <div class="meal-items">2 butir telur rebus</div>
+      </div>
+      <div class="meal-kcal">~140 kkal</div>
+    </div>
+    <div class="meal-row dinner">
+      <div class="meal-time">19.00</div>
+      <div class="meal-info">
+        <div class="meal-name">Makan Malam 🌙</div>
+        <div class="meal-items">Nasi ½ centong · Tahu goreng 2 pcs · Tumis kangkung</div>
+      </div>
+      <div class="meal-kcal">~450 kkal</div>
+    </div>
+    <div class="day-total">
+      <span class="day-total-label">Total Senin</span>
+      <span class="day-total-num">~1.190 kkal</span>
+    </div>
+  </div>
+
+  <!-- Day 2 -->
+  <div id="day-2" class="meal-card">
+    <div class="meal-row">
+      <div class="meal-time">12.00</div>
+      <div class="meal-info">
+        <div class="meal-name">Makan Pertama 🍚</div>
+        <div class="meal-items">Nasi + Pecel ayam (minta dada, tanpa nasi tambah) + Lalapan timun</div>
+      </div>
+      <div class="meal-kcal">~650 kkal</div>
+    </div>
+    <div class="meal-row snack">
+      <div class="meal-time">15.00</div>
+      <div class="meal-info">
+        <div class="meal-name">Snack 🍌</div>
+        <div class="meal-items">Pisang 1 buah · Air putih</div>
+      </div>
+      <div class="meal-kcal">~90 kkal</div>
+    </div>
+    <div class="meal-row dinner">
+      <div class="meal-time">19.00</div>
+      <div class="meal-info">
+        <div class="meal-name">Makan Malam 🌙</div>
+        <div class="meal-items">Nasi ½ centong · Telur dadar · Sayur sop warteg</div>
+      </div>
+      <div class="meal-kcal">~420 kkal</div>
+    </div>
+    <div class="day-total">
+      <span class="day-total-label">Total Selasa</span>
+      <span class="day-total-num">~1.160 kkal</span>
+    </div>
+  </div>
+
+  <!-- Day 3 -->
+  <div id="day-3" class="meal-card">
+    <div class="meal-row">
+      <div class="meal-time">12.00</div>
+      <div class="meal-info">
+        <div class="meal-name">Makan Pertama 🍚</div>
+        <div class="meal-items">Nasi + Ikan goreng + Sayur asem + Tahu</div>
+      </div>
+      <div class="meal-kcal">~580 kkal</div>
+    </div>
+    <div class="meal-row snack">
+      <div class="meal-time">15.00</div>
+      <div class="meal-info">
+        <div class="meal-name">Snack 🥤</div>
+        <div class="meal-items">Tahu goreng polos 2 pcs (minta tanpa tepung)</div>
+      </div>
+      <div class="meal-kcal">~150 kkal</div>
+    </div>
+    <div class="meal-row dinner">
+      <div class="meal-time">19.00</div>
+      <div class="meal-info">
+        <div class="meal-name">Makan Malam 🌙</div>
+        <div class="meal-items">Nasi ½ centong · Tempe orek · Tumis tauge</div>
+      </div>
+      <div class="meal-kcal">~400 kkal</div>
+    </div>
+    <div class="day-total">
+      <span class="day-total-label">Total Rabu</span>
+      <span class="day-total-num">~1.130 kkal</span>
+    </div>
+  </div>
+
+  <!-- Day 4 -->
+  <div id="day-4" class="meal-card">
+    <div class="meal-row">
+      <div class="meal-time">12.00</div>
+      <div class="meal-info">
+        <div class="meal-name">Makan Pertama 🍚</div>
+        <div class="meal-items">Nasi + Ayam bakar + Cap cay kuah + Tempe</div>
+      </div>
+      <div class="meal-kcal">~620 kkal</div>
+    </div>
+    <div class="meal-row snack">
+      <div class="meal-time">15.00</div>
+      <div class="meal-info">
+        <div class="meal-name">Snack 🥚</div>
+        <div class="meal-items">2 butir telur rebus</div>
+      </div>
+      <div class="meal-kcal">~140 kkal</div>
+    </div>
+    <div class="meal-row dinner">
+      <div class="meal-time">19.00</div>
+      <div class="meal-info">
+        <div class="meal-name">Makan Malam 🌙</div>
+        <div class="meal-items">Nasi ½ centong · Perkedel tahu · Sayur bening</div>
+      </div>
+      <div class="meal-kcal">~430 kkal</div>
+    </div>
+    <div class="day-total">
+      <span class="day-total-label">Total Kamis</span>
+      <span class="day-total-num">~1.190 kkal</span>
+    </div>
+  </div>
+
+  <!-- Day 5 -->
+  <div id="day-5" class="meal-card">
+    <div class="meal-row">
+      <div class="meal-time">12.00</div>
+      <div class="meal-info">
+        <div class="meal-name">Makan Pertama 🍚</div>
+        <div class="meal-items">Nasi + Semur tahu tempe + Sayur bayam + Telur</div>
+      </div>
+      <div class="meal-kcal">~600 kkal</div>
+    </div>
+    <div class="meal-row snack">
+      <div class="meal-time">15.00</div>
+      <div class="meal-info">
+        <div class="meal-name">Snack 🥜</div>
+        <div class="meal-items">Kacang rebus segenggam / Pisang 1 buah</div>
+      </div>
+      <div class="meal-kcal">~100 kkal</div>
+    </div>
+    <div class="meal-row dinner">
+      <div class="meal-time">19.00</div>
+      <div class="meal-info">
+        <div class="meal-name">Makan Malam 🌙</div>
+        <div class="meal-items">Nasi ½ centong · Ikan goreng kecil · Lalapan timun</div>
+      </div>
+      <div class="meal-kcal">~450 kkal</div>
+    </div>
+    <div class="day-total">
+      <span class="day-total-label">Total Jumat</span>
+      <span class="day-total-num">~1.150 kkal</span>
+    </div>
+  </div>
+
+  <!-- Day 6 -->
+  <div id="day-6" class="meal-card">
+    <div class="meal-row">
+      <div class="meal-time">12.00</div>
+      <div class="meal-info">
+        <div class="meal-name">Makan Pertama 🍜</div>
+        <div class="meal-items">Soto ayam (minta tanpa soun, tambah telur, kuah bening)</div>
+      </div>
+      <div class="meal-kcal">~550 kkal</div>
+    </div>
+    <div class="meal-row snack">
+      <div class="meal-time">15.00</div>
+      <div class="meal-info">
+        <div class="meal-name">Snack 🥚</div>
+        <div class="meal-items">2 butir telur rebus</div>
+      </div>
+      <div class="meal-kcal">~140 kkal</div>
+    </div>
+    <div class="meal-row dinner">
+      <div class="meal-time">19.00</div>
+      <div class="meal-info">
+        <div class="meal-name">Makan Malam 🌙</div>
+        <div class="meal-items">Nasi ½ centong · Tempe goreng · Tumis kangkung</div>
+      </div>
+      <div class="meal-kcal">~400 kkal</div>
+    </div>
+    <div class="day-total">
+      <span class="day-total-label">Total Sabtu</span>
+      <span class="day-total-num">~1.090 kkal</span>
+    </div>
+  </div>
+
+  <!-- Day 7 -->
+  <div id="day-7" class="meal-card">
+    <div class="card" style="background:rgba(255,210,63,0.07);border-color:rgba(255,210,63,0.3);padding:12px;margin-bottom:12px;">
+      <div style="font-size:0.82rem;">🎉 <strong>Flex Day!</strong> Boleh sedikit lebih fleksibel hari ini, asal tetap dalam window IF dan tidak kalap.</div>
+    </div>
+    <div class="meal-row">
+      <div class="meal-time">12.00</div>
+      <div class="meal-info">
+        <div class="meal-name">Makan Pertama 🍗</div>
+        <div class="meal-items">Nasi + Bebak/Ayam goreng + Lalapan + Sambal (warteg / pinggir jalan)</div>
+      </div>
+      <div class="meal-kcal">~700 kkal</div>
+    </div>
+    <div class="meal-row snack">
+      <div class="meal-time">15.00</div>
+      <div class="meal-info">
+        <div class="meal-name">Snack ☕</div>
+        <div class="meal-items">Teh tawar + Tahu goreng</div>
+      </div>
+      <div class="meal-kcal">~120 kkal</div>
+    </div>
+    <div class="meal-row dinner">
+      <div class="meal-time">19.00</div>
+      <div class="meal-info">
+        <div class="meal-name">Makan Malam 🌙</div>
+        <div class="meal-items">Nasi ½ centong · Telur · Sayur apapun yang ada</div>
+      </div>
+      <div class="meal-kcal">~400 kkal</div>
+    </div>
+    <div class="day-total">
+      <span class="day-total-label">Total Minggu</span>
+      <span class="day-total-num">~1.220 kkal</span>
+    </div>
+  </div>
+</section>
+
+<!-- ===== WORKOUT ===== -->
+<section id="workout" class="section">
+  <div class="section-title">💪 WORKOUT PLAN</div>
+  <div class="section-sub">6x/Minggu · Bodyweight → Calisthenics · Bulan 1–2</div>
+
+  <div class="week-grid">
+    <div class="week-day push active-day" onclick="showWorkout('sen')">
+      <div class="week-day-name">SEN</div>
+      <div class="week-day-emoji">🫸</div>
+      <div class="week-day-type">Push</div>
+    </div>
+    <div class="week-day pull" onclick="showWorkout('sel')">
+      <div class="week-day-name">SEL</div>
+      <div class="week-day-emoji">🫷</div>
+      <div class="week-day-type">Pull</div>
+    </div>
+    <div class="week-day legs" onclick="showWorkout('rab')">
+      <div class="week-day-name">RAB</div>
+      <div class="week-day-emoji">🦵</div>
+      <div class="week-day-type">Legs</div>
+    </div>
+    <div class="week-day push" onclick="showWorkout('kam')">
+      <div class="week-day-name">KAM</div>
+      <div class="week-day-emoji">🫸</div>
+      <div class="week-day-type">Push</div>
+    </div>
+    <div class="week-day pull" onclick="showWorkout('jum')">
+      <div class="week-day-name">JUM</div>
+      <div class="week-day-emoji">🫷</div>
+      <div class="week-day-type">Pull</div>
+    </div>
+    <div class="week-day full" onclick="showWorkout('sab')">
+      <div class="week-day-name">SAB</div>
+      <div class="week-day-emoji">⚡</div>
+      <div class="week-day-type">Full</div>
+    </div>
+    <div class="week-day rest" onclick="showWorkout('min')">
+      <div class="week-day-name">MIN</div>
+      <div class="week-day-emoji">😴</div>
+      <div class="week-day-type">Rest</div>
+    </div>
+  </div>
+
+  <!-- SENIN PUSH -->
+  <div id="workout-sen" class="workout-detail active">
+    <div class="card" style="border-color: rgba(255,107,53,0.4);">
+      <div class="card-title"><div class="icon" style="background:rgba(255,107,53,0.15);">🫸</div> SENIN & KAMIS — Push Day</div>
+      <div style="color:var(--muted); font-size:0.78rem; margin-bottom:14px;">Fokus: Dada · Bahu · Tricep</div>
+      <table class="exercise-table">
+        <thead>
+          <tr>
+            <th>Gerakan</th>
+            <th>Set × Reps</th>
+            <th>Catatan</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Push-up</strong></td>
+            <td><span class="sets-badge">3×8–12</span></td>
+            <td style="color:var(--muted); font-size:0.75rem;">Pakai lutut jika belum kuat</td>
+          </tr>
+          <tr>
+            <td><strong>Wide Push-up</strong></td>
+            <td><span class="sets-badge">3×8</span></td>
+            <td style="color:var(--muted); font-size:0.75rem;">Tangan lebih lebar dari bahu</td>
+          </tr>
+          <tr>
+            <td><strong>Pike Push-up</strong></td>
+            <td><span class="sets-badge">3×8</span></td>
+            <td style="color:var(--muted); font-size:0.75rem;">Fokus bahu, pinggul tinggi</td>
+          </tr>
+          <tr>
+            <td><strong>Tricep Dips</strong></td>
+            <td><span class="sets-badge">3×10</span></td>
+            <td style="color:var(--muted); font-size:0.75rem;">Gunakan kursi atau meja</td>
+          </tr>
+          <tr>
+            <td><strong>Plank</strong></td>
+            <td><span class="sets-badge">3×30 det</span></td>
+            <td style="color:var(--muted); font-size:0.75rem;">Jaga tubuh lurus</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- SELASA PULL -->
+  <div id="workout-sel" class="workout-detail">
+    <div class="card" style="border-color: rgba(79,172,254,0.4);">
+      <div class="card-title"><div class="icon" style="background:rgba(79,172,254,0.15);">🫷</div> SELASA & JUMAT — Pull + Core</div>
+      <div style="color:var(--muted); font-size:0.78rem; margin-bottom:14px;">Fokus: Punggung · Bicep · Core</div>
+      <table class="exercise-table">
+        <thead>
+          <tr>
+            <th>Gerakan</th>
+            <th>Set × Reps</th>
+            <th>Catatan</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Dead Hang</strong></td>
+            <td><span class="sets-badge" style="color:#4facfe">3×30 det</span></td>
+            <td style="color:var(--muted); font-size:0.75rem;">Gantung diam di pull-up bar/tiang</td>
+          </tr>
+          <tr>
+            <td><strong>Australian Pull-up</strong></td>
+            <td><span class="sets-badge" style="color:#4facfe">3×8</span></td>
+            <td style="color:var(--muted); font-size:0.75rem;">Gantung di meja/besi rendah</td>
+          </tr>
+          <tr>
+            <td><strong>Superman Hold</strong></td>
+            <td><span class="sets-badge" style="color:#4facfe">3×12</span></td>
+            <td style="color:var(--muted); font-size:0.75rem;">Tahan 2–3 detik di atas</td>
+          </tr>
+          <tr>
+            <td><strong>Bicycle Crunch</strong></td>
+            <td><span class="sets-badge" style="color:#4facfe">3×15</span></td>
+            <td style="color:var(--muted); font-size:0.75rem;">Pelan dan terkontrol</td>
+          </tr>
+          <tr>
+            <td><strong>Leg Raise</strong></td>
+            <td><span class="sets-badge" style="color:#4facfe">3×10</span></td>
+            <td style="color:var(--muted); font-size:0.75rem;">Berbaring, angkat kaki 90°</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- RABU LEGS -->
+  <div id="workout-rab" class="workout-detail">
+    <div class="card" style="border-color: rgba(6,255,165,0.4);">
+      <div class="card-title"><div class="icon" style="background:rgba(6,255,165,0.12);">🦵</div> RABU — Legs Day</div>
+      <div style="color:var(--muted); font-size:0.78rem; margin-bottom:14px;">Fokus: Paha · Glute · Betis</div>
+      <table class="exercise-table">
+        <thead>
+          <tr>
+            <th>Gerakan</th>
+            <th>Set × Reps</th>
+            <th>Catatan</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Squat</strong></td>
+            <td><span class="sets-badge" style="color:var(--accent3)">4×15</span></td>
+            <td style="color:var(--muted); font-size:0.75rem;">Tekuk lutut 90°, punggung lurus</td>
+          </tr>
+          <tr>
+            <td><strong>Lunges</strong></td>
+            <td><span class="sets-badge" style="color:var(--accent3)">3×12 ea</span></td>
+            <td style="color:var(--muted); font-size:0.75rem;">Bergantian kanan-kiri</td>
+          </tr>
+          <tr>
+            <td><strong>Glute Bridge</strong></td>
+            <td><span class="sets-badge" style="color:var(--accent3)">3×15</span></td>
+            <td style="color:var(--muted); font-size:0.75rem;">Tahan 2 detik di atas</td>
+          </tr>
+          <tr>
+            <td><strong>Calf Raise</strong></td>
+            <td><span class="sets-badge" style="color:var(--accent3)">3×20</span></td>
+            <td style="color:var(--muted); font-size:0.75rem;">Bisa pakai anak tangga</td>
+          </tr>
+          <tr>
+            <td><strong>Wall Sit</strong></td>
+            <td><span class="sets-badge" style="color:var(--accent3)">3×30 det</span></td>
+            <td style="color:var(--muted); font-size:0.75rem;">Punggung rapat ke tembok</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- KAMIS = PUSH -->
+  <div id="workout-kam" class="workout-detail">
+    <div class="card" style="border-color: rgba(255,107,53,0.4);">
+      <div class="card-title"><div class="icon" style="background:rgba(255,107,53,0.15);">🫸</div> KAMIS — Push Day (Variasi)</div>
+      <div style="color:var(--muted); font-size:0.78rem; margin-bottom:14px;">Same as Senin — tingkatkan reps jika sudah lebih kuat</div>
+      <table class="exercise-table">
+        <thead><tr><th>Gerakan</th><th>Set × Reps</th><th>Catatan</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Push-up</strong></td><td><span class="sets-badge">3×10–15</span></td><td style="color:var(--muted); font-size:0.75rem;">Tingkatkan dari Senin</td></tr>
+          <tr><td><strong>Diamond Push-up</strong></td><td><span class="sets-badge">3×6–8</span></td><td style="color:var(--muted); font-size:0.75rem;">Tangan bentuk berlian, fokus tricep</td></tr>
+          <tr><td><strong>Pike Push-up</strong></td><td><span class="sets-badge">3×10</span></td><td style="color:var(--muted); font-size:0.75rem;">Lebih dalam dari Senin</td></tr>
+          <tr><td><strong>Tricep Dips</strong></td><td><span class="sets-badge">3×12</span></td><td style="color:var(--muted); font-size:0.75rem;">Naik dari Senin</td></tr>
+          <tr><td><strong>Side Plank</strong></td><td><span class="sets-badge">3×20 det</span></td><td style="color:var(--muted); font-size:0.75rem;">Kanan & kiri bergantian</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- JUMAT = PULL -->
+  <div id="workout-jum" class="workout-detail">
+    <div class="card" style="border-color: rgba(79,172,254,0.4);">
+      <div class="card-title"><div class="icon" style="background:rgba(79,172,254,0.15);">🫷</div> JUMAT — Pull + Core (Variasi)</div>
+      <div style="color:var(--muted); font-size:0.78rem; margin-bottom:14px;">Tambah reps dari Selasa</div>
+      <table class="exercise-table">
+        <thead><tr><th>Gerakan</th><th>Set × Reps</th><th>Catatan</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Dead Hang</strong></td><td><span class="sets-badge" style="color:#4facfe">3×40 det</span></td><td style="color:var(--muted); font-size:0.75rem;">Tingkatkan dari Selasa</td></tr>
+          <tr><td><strong>Australian Pull-up</strong></td><td><span class="sets-badge" style="color:#4facfe">3×10</span></td><td style="color:var(--muted); font-size:0.75rem;">Lebih lambat = lebih sulit</td></tr>
+          <tr><td><strong>Superman Hold</strong></td><td><span class="sets-badge" style="color:#4facfe">3×15</span></td><td style="color:var(--muted); font-size:0.75rem;">Naik dari Selasa</td></tr>
+          <tr><td><strong>V-Up</strong></td><td><span class="sets-badge" style="color:#4facfe">3×10</span></td><td style="color:var(--muted); font-size:0.75rem;">Sentuh ujung kaki dengan tangan</td></tr>
+          <tr><td><strong>Hollow Body Hold</strong></td><td><span class="sets-badge" style="color:#4facfe">3×15 det</span></td><td style="color:var(--muted); font-size:0.75rem;">Dasar gerakan calisthenics</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- SABTU FULL BODY -->
+  <div id="workout-sab" class="workout-detail">
+    <div class="card" style="border-color: rgba(255,210,63,0.4);">
+      <div class="card-title"><div class="icon" style="background:rgba(255,210,63,0.12);">⚡</div> SABTU — Full Body / Skill Day</div>
+      <div style="color:var(--muted); font-size:0.78rem; margin-bottom:14px;">Kombinasi semua otot + latihan skill calisthenics dasar</div>
+      <table class="exercise-table">
+        <thead><tr><th>Gerakan</th><th>Set × Reps</th><th>Catatan</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Squat</strong></td><td><span class="sets-badge" style="color:var(--accent2)">3×15</span></td><td style="color:var(--muted); font-size:0.75rem;">Warm up kaki</td></tr>
+          <tr><td><strong>Push-up</strong></td><td><span class="sets-badge" style="color:var(--accent2)">3×10</span></td><td style="color:var(--muted); font-size:0.75rem;">Dada & bahu</td></tr>
+          <tr><td><strong>Plank</strong></td><td><span class="sets-badge" style="color:var(--accent2)">3×30 det</span></td><td style="color:var(--muted); font-size:0.75rem;">Core stability</td></tr>
+          <tr><td><strong>Mountain Climber</strong></td><td><span class="sets-badge" style="color:var(--accent2)">3×20</span></td><td style="color:var(--muted); font-size:0.75rem;">Cardio + core</td></tr>
+          <tr><td><strong>Burpee (pelan)</strong></td><td><span class="sets-badge" style="color:var(--accent2)">3×5</span></td><td style="color:var(--muted); font-size:0.75rem;">Full body conditioning</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- MINGGU REST -->
+  <div id="workout-min" class="workout-detail">
+    <div class="card" style="border-color: rgba(112,112,160,0.3);">
+      <div class="card-title"><div class="icon">😴</div> MINGGU — REST DAY</div>
+      <div style="color:var(--muted); font-size:0.82rem; line-height:1.6;">
+        Recovery adalah bagian dari training. Otot tumbuh saat istirahat, bukan saat workout.<br><br>
+        ✅ Boleh: Jalan santai, peregangan ringan, foam rolling<br>
+        ❌ Jangan: Workout berat, langsung skip recovery
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== ROADMAP ===== -->
+<section id="roadmap" class="section">
+  <div class="section-title">🗺️ ROADMAP CALISTHENICS</div>
+  <div class="section-sub">6 Bulan dari Bodyweight Dasar → Calisthenics</div>
+
+  <div class="roadmap-phases">
+    <div class="phase-card p1">
+      <div class="phase-header">
+        <div>
+          <div class="phase-title">FASE 1 — FOUNDATION</div>
+          <div style="color:var(--muted); font-size:0.78rem;">Bulan 1–2 · Bangun kekuatan dasar</div>
+        </div>
+        <div class="phase-badge">Bulan 1–2</div>
+      </div>
+      <div style="font-size:0.82rem; line-height:1.6; color:var(--muted);">
+        Fokus membangun fondasi kekuatan, memperbaiki form gerakan, dan membiasakan tubuh dengan beban latihan rutin.
+      </div>
+      <div class="skill-chips">
+        <div class="chip done">✓ Push-up</div>
+        <div class="chip done">✓ Squat</div>
+        <div class="chip done">✓ Dead Hang</div>
+        <div class="chip done">✓ Australian Pull-up</div>
+        <div class="chip done">✓ Plank 30 det</div>
+        <div class="chip done">✓ Hollow Body</div>
+      </div>
+    </div>
+
+    <div class="phase-card p2">
+      <div class="phase-header">
+        <div>
+          <div class="phase-title">FASE 2 — INTERMEDIATE</div>
+          <div style="color:var(--muted); font-size:0.78rem;">Bulan 3–4 · Volume & skill intro</div>
+        </div>
+        <div class="phase-badge">Bulan 3–4</div>
+      </div>
+      <div style="font-size:0.82rem; line-height:1.6; color:var(--muted);">
+        Tingkatkan volume (4–5 set, 15–20 reps). Masuk gerakan yang lebih menantang sebagai persiapan calisthenics skill.
+      </div>
+      <div class="skill-chips">
+        <div class="chip target">Diamond Push-up</div>
+        <div class="chip target">Archer Push-up</div>
+        <div class="chip target">Negative Pull-up</div>
+        <div class="chip target">Jump Squat</div>
+        <div class="chip target">Bulgarian Split Squat</div>
+        <div class="chip target">V-Up</div>
+      </div>
+    </div>
+
+    <div class="phase-card p3">
+      <div class="phase-header">
+        <div>
+          <div class="phase-title">FASE 3 — CALISTHENICS</div>
+          <div style="color:var(--muted); font-size:0.78rem;">Bulan 5–6 · Skill mastery</div>
+        </div>
+        <div class="phase-badge">Bulan 5–6</div>
+      </div>
+      <div style="font-size:0.82rem; line-height:1.6; color:var(--muted);">
+        Fokus pada skill calisthenics ikonik. Dari negative pull-up progres ke full pull-up, kemudian menuju muscle-up prep.
+      </div>
+      <div class="skill-chips">
+        <div class="chip target" style="border-color:var(--accent3);color:var(--accent3);">🎯 Full Pull-up</div>
+        <div class="chip target" style="border-color:var(--accent3);color:var(--accent3);">🎯 Dips Paralel</div>
+        <div class="chip target" style="border-color:var(--accent3);color:var(--accent3);">🎯 L-Sit</div>
+        <div class="chip target" style="border-color:var(--accent3);color:var(--accent3);">🎯 Pseudo Planche</div>
+        <div class="chip target" style="border-color:var(--accent2);color:var(--accent2);">⭐ Muscle-up Prep</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:16px;">
+    <div class="card-title"><div class="icon">🚶</div> Soal Jalan Kaki 5.000 Steps</div>
+    <div class="tip-grid">
+      <div class="tip-item" style="border-color: rgba(6,255,165,0.3);">
+        <div class="tip-icon">✅</div>
+        <div class="tip-text">
+          <strong style="color:var(--accent3)">Bisa Banget!</strong>
+          <span>5.000 steps = ~300–350 kkal terbakar extra per hari</span>
+        </div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-icon">🏃</div>
+        <div class="tip-text">
+          <strong>Low Intensity = Ideal</strong>
+          <span>Tidak mengganggu recovery otot workout</span>
+        </div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-icon">📅</div>
+        <div class="tip-text">
+          <strong>Konsisten Setiap Hari</strong>
+          <span>Jalan ke warung, kampus, dll sudah cukup dihitung</span>
+        </div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-icon">🎯</div>
+        <div class="tip-text">
+          <strong>Upgrade ke 7.000–8.000</strong>
+          <span>Progress lebih cepat tanpa perlu joging</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== TRACKER ===== -->
+<section id="tracker" class="section">
+  <div class="section-title">📈 DAILY TRACKER</div>
+  <div class="section-sub">Pantau progress harianmu di sini</div>
+
+  <!-- CHECKLIST HARIAN -->
+  <div class="card">
+    <div class="card-title"><div class="icon">✅</div> Checklist Harian</div>
+    <div id="checklist-container">
+      <div class="checklist-item" onclick="toggleCheck(this)">
+        <div class="check-box">✓</div>
+        <div class="check-label">⏰ Jaga window makan 12.00–20.00 (IF 16:8)</div>
+      </div>
+      <div class="checklist-item" onclick="toggleCheck(this)">
+        <div class="check-box">✓</div>
+        <div class="check-label">💧 Minum minimal 2 liter air putih</div>
+      </div>
+      <div class="checklist-item" onclick="toggleCheck(this)">
+        <div class="check-box">✓</div>
+        <div class="check-label">🥗 Mulai makan dengan sayur dulu</div>
+      </div>
+      <div class="checklist-item" onclick="toggleCheck(this)">
+        <div class="check-box">✓</div>
+        <div class="check-label">💪 Workout sesuai jadwal hari ini</div>
+      </div>
+      <div class="checklist-item" onclick="toggleCheck(this)">
+        <div class="check-box">✓</div>
+        <div class="check-label">🚶 Jalan minimal 5.000 langkah</div>
+      </div>
+      <div class="checklist-item" onclick="toggleCheck(this)">
+        <div class="check-box">✓</div>
+        <div class="check-label">😴 Tidur minimal 6–7 jam</div>
+      </div>
+      <div class="checklist-item" onclick="toggleCheck(this)">
+        <div class="check-box">✓</div>
+        <div class="check-label">🚫 Tidak makan di luar window IF malam ini</div>
+      </div>
+    </div>
+    <div id="checklist-progress" style="margin-top:14px;">
+      <div class="progress-label"><span>Progress Hari Ini</span><span id="check-count">0/7</span></div>
+      <div class="progress-bar"><div class="progress-fill" id="check-bar" style="width:0%"></div></div>
+    </div>
+    <button class="btn-primary" onclick="resetChecklist()" style="margin-top:12px; background: var(--surface2); color: var(--muted); border: 1px solid var(--border);">Reset Checklist</button>
+  </div>
+
+  <!-- HYDRATION TRACKER -->
+  <div class="card">
+    <div class="card-title"><div class="icon">💧</div> Water Tracker — Target 8 Gelas</div>
+    <div style="font-size:0.82rem; color:var(--muted); margin-bottom:10px;">Klik gelas untuk mencatat minum air</div>
+    <div class="water-glasses" id="water-glasses">
+      <div class="glass" onclick="toggleGlass(0)">🥛</div>
+      <div class="glass" onclick="toggleGlass(1)">🥛</div>
+      <div class="glass" onclick="toggleGlass(2)">🥛</div>
+      <div class="glass" onclick="toggleGlass(3)">🥛</div>
+      <div class="glass" onclick="toggleGlass(4)">🥛</div>
+      <div class="glass" onclick="toggleGlass(5)">🥛</div>
+      <div class="glass" onclick="toggleGlass(6)">🥛</div>
+      <div class="glass" onclick="toggleGlass(7)">🥛</div>
+    </div>
+    <div id="water-status" style="margin-top:10px; font-size:0.82rem; color:var(--muted);">0 / 8 gelas</div>
+  </div>
+
+  <!-- WEIGHT LOG -->
+  <div class="card">
+    <div class="card-title"><div class="icon">⚖️</div> Log Berat Badan</div>
+    <div class="weight-input-row">
+      <input type="number" id="weight-input" placeholder="Masukkan BB hari ini (kg)" step="0.1" min="40" max="200">
+      <button class="btn-primary" onclick="logWeight()">Catat</button>
+    </div>
+    <div class="weight-log" id="weight-log">
+      <div style="color:var(--muted); font-size:0.8rem; text-align:center; padding:20px;">Belum ada data. Catat BB pertamamu!</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== TIPS ===== -->
+<section id="tips" class="section">
+  <div class="section-title">💡 TIPS & MASALAH</div>
+  <div class="section-sub">Solusi untuk tantangan yang sering dihadapi</div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon">🍬</div> Atasi Ngidam Manis & Gorengan</div>
+    <div class="tip-grid">
+      <div class="tip-item">
+        <div class="tip-icon">🥗</div>
+        <div class="tip-text"><strong>Mulai Makan dengan Sayur</strong><span>Ngurangi nafsu makan otomatis, bikin kenyang lebih awal</span></div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-icon">🥚</div>
+        <div class="tip-text"><strong>Tambah Protein di Warteg</strong><span>Minta tambah tahu/tempe/telur — protein bikin kenyang lebih lama</span></div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-icon">💧</div>
+        <div class="tip-text"><strong>Minum Air Sebelum Makan</strong><span>1 gelas besar = perut lebih penuh, makan lebih sedikit</span></div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-icon">🍵</div>
+        <div class="tip-text"><strong>Ganti Manis dengan Teh Tawar</strong><span>Kalau ngidam manis, minum teh hangat tanpa gula. Tunggu 10 menit — biasanya hilang</span></div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-icon">🔢</div>
+        <div class="tip-text"><strong>Gorengan Max 2 Pcs/Hari</strong><span>Pilih tempe/tahu goreng, bukan bakwan atau bala-bala</span></div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-icon">🥜</div>
+        <div class="tip-text"><strong>Snack Sehat yang Boleh</strong><span>Tahu polos, telur rebus, pisang, kacang rebus</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon">😴</div> Begadang & Lapar Malam</div>
+    <div class="tip-grid">
+      <div class="tip-item" style="border-color:rgba(255,64,64,0.2);">
+        <div class="tip-icon">🚨</div>
+        <div class="tip-text"><strong style="color:var(--danger)">Begadang = Musuh Diet</strong><span>Kurang tidur → kortisol naik → nafsu makan naik → susah kurus</span></div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-icon">🌙</div>
+        <div class="tip-text"><strong>Kalau Harus Begadang</strong><span>Siapkan air hangat dan teh tawar. Jangan ada makanan visual di meja</span></div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-icon">⏰</div>
+        <div class="tip-text"><strong>Jangan Geser Window Makan</strong><span>Tetap tutup puasa jam 20.00 meski begadang sampai pagi</span></div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-icon">🎯</div>
+        <div class="tip-text"><strong>Target Tidur</strong><span>Minimal 6–7 jam. Kalau bisa cicil dengan power nap 20 menit siang</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon">📊</div> Ekspektasi Realistis per Bulan</div>
+    <div style="display:grid; gap:10px;">
+      <div class="meal-row" style="border-left-color: #4facfe;">
+        <div class="meal-time">Bulan 1</div>
+        <div class="meal-info">
+          <div class="meal-name">3–4 kg turun</div>
+          <div class="meal-items">Water weight besar di awal + lemak. 87 → ~83 kg</div>
+        </div>
+        <div class="meal-kcal" style="color:#4facfe">87→83</div>
+      </div>
+      <div class="meal-row" style="border-left-color: var(--accent);">
+        <div class="meal-time">Bulan 2</div>
+        <div class="meal-info">
+          <div class="meal-name">2–3 kg turun</div>
+          <div class="meal-items">Lebih stabil setelah bulan pertama. ~83 → 80 kg</div>
+        </div>
+        <div class="meal-kcal">83→80</div>
+      </div>
+      <div class="meal-row" style="border-left-color: var(--accent3);">
+        <div class="meal-time">Bulan 3</div>
+        <div class="meal-info">
+          <div class="meal-name">2–3 kg turun ✅</div>
+          <div class="meal-items">Badan mulai terlihat lebih defined. ~80 → 77 kg</div>
+        </div>
+        <div class="meal-kcal" style="color:var(--accent3)">80→77</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon">🔑</div> Rules of Thumb Warteg</div>
+    <div style="display:grid; gap:8px;">
+      <div class="tip-item"><div class="tip-icon">🍚</div><div class="tip-text"><strong>"Bang nasinya ½ porsi, tambahin sayurnya"</strong><span>Biasanya gratis atau cuma +Rp 2.000</span></div></div>
+      <div class="tip-item"><div class="tip-icon">🍗</div><div class="tip-text"><strong>Pilih ayam bagian dada, bukan paha/sayap</strong><span>Lebih rendah lemak, protein lebih tinggi</span></div></div>
+      <div class="tip-item"><div class="tip-icon">🍲</div><div class="tip-text"><strong>Pilih kuah bening bukan santan</strong><span>Sup, soto, sayur bening jauh lebih rendah kalori</span></div></div>
+      <div class="tip-item"><div class="tip-icon">🧂</div><div class="tip-text"><strong>Hati-hati kecap & sambal sachet</strong><span>Banyak mengandung gula tersembunyi</span></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- FLOATING INFO -->
+<div class="float-info">
+  <div class="float-dot"></div>
+  <span>Target: <strong>1.500 kkal</strong> · IF 12–20</span>
 </div>
+
+<!-- SCROLL TOP -->
+<button class="scroll-top" id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
 
 <script>
-// ─────────────────────────────────────────
-// DATA MAKAN 7 HARI
-// ─────────────────────────────────────────
-const meals = [
-  {
-    day: "SENIN",
-    siang: {
-      name: "Nasi + Ayam Bakar + Lalapan",
-      items: ["Nasi ½ porsi (100g)", "Ayam bakar 1 potong (buang kulit)", "Lalap timun, tomat, kemangi", "Tahu goreng 1 potong", "Sambal tomat (tidak banyak minyak)"],
-      kal: 590
-    },
-    snack: {
-      name: "Pisang + Air Putih",
-      items: ["Pisang ambon 2 buah", "Air putih minimal 500ml"],
-      kal: 180
-    },
-    malam: {
-      name: "Soto Ayam Tanpa Nasi",
-      items: ["Soto ayam 1 mangkuk (pakai bihun, bukan nasi)", "Telur rebus 1 butir", "Sayuran dalam soto (kol, seledri)", "Teh tawar"],
-      kal: 380
-    },
-    tip: "Minta ke warteg: 'ayam bakar, nasi setengah porsi, lalapan banyak ya.' Sederhana, mudah, efektif."
-  },
-  {
-    day: "SELASA",
-    siang: {
-      name: "Pecel / Gado-gado + Tahu Tempe",
-      items: ["Pecel porsi warteg (sayuran rebus + bumbu kacang sedikit)", "Tahu 2 potong / Tempe 2 potong", "Nasi ½ porsi", "Minta bumbu kacang dipisah, pakai sedikit"],
-      kal: 560
-    },
-    snack: {
-      name: "Kacang Rebus + Buah",
-      items: ["Kacang rebus segenggam (~50g)", "Jeruk 1 buah atau apel 1 buah"],
-      kal: 220
-    },
-    malam: {
-      name: "Sayur Bening + Ikan Goreng",
-      items: ["Sayur bening bayam/kangkung 1 mangkuk", "Ikan goreng 1 potong kecil", "Nasi ¼ porsi ATAU skip nasi", "Teh tawar"],
-      kal: 350
-    },
-    tip: "Pecel adalah pilihan terbaik di warteg — tinggi serat, rendah kalori asal bumbu kacangnya tidak kebanyakan."
-  },
-  {
-    day: "RABU",
-    siang: {
-      name: "Nasi + Tempe Bacem + Sayur Asem",
-      items: ["Nasi ½ porsi", "Tempe bacem 2 potong", "Sayur asem 1 mangkuk (banyak sayurnya)", "Tahu goreng 1 potong"],
-      kal: 550
-    },
-    snack: {
-      name: "Salad Buah Tanpa SKM",
-      items: ["Semangka / melon / pepaya potong (~200g)", "Yogurt plain 1 cup kecil (opsional)", "TANPA susu kental manis sama sekali"],
-      kal: 160
-    },
-    malam: {
-      name: "Bakso Kuah (Tanpa Mie/Nasi)",
-      items: ["Bakso kuah 5–6 bola", "Minta tambah sayuran (sawi, tauge)", "Skip mie/bihun, minta tambah tahu/telur", "Air putih / teh tawar"],
-      kal: 320
-    },
-    tip: "Rabu = hari ringan. Kalori sedikit lebih rendah (~1.030) = extra defisit untuk kompensasi kalau weekend slip."
-  },
-  {
-    day: "KAMIS",
-    siang: {
-      name: "Nasi + Ikan Goreng + Ca Kangkung",
-      items: ["Nasi ½ porsi", "Ikan goreng / ikan pindang 1 ekor kecil", "Ca kangkung / tumis bayam 1 porsi", "Tahu 1 potong"],
-      kal: 580
-    },
-    snack: {
-      name: "Telur Rebus + Timun",
-      items: ["Telur rebus 2 butir", "Timun 1 buah, dimakan langsung", "Sedikit garam / kecap"],
-      kal: 190
-    },
-    malam: {
-      name: "Sup Tahu Telur",
-      items: ["Sup tahu + telur + wortel + brokoli", "Beli di warteg / warmindo", "Nasi ¼ porsi atau tanpa nasi", "Tambah 1 tempe goreng"],
-      kal: 370
-    },
-    tip: "Telur rebus adalah snack paling cost-effective: murah, mengenyangkan, protein tinggi, bisa beli di mana saja."
-  },
-  {
-    day: "JUMAT",
-    siang: {
-      name: "Nasi Padang Versi Sehat",
-      items: ["Nasi ½ porsi", "Rendang 1 potong kecil ATAU ayam bakar", "Sayur nangka / daun singkong (ambil yang kurang santan)", "SKIP: gulai, sambel goreng kentang, dendeng"],
-      kal: 620
-    },
-    snack: {
-      name: "Tahu Sumedang + Teh Tawar",
-      items: ["Tahu sumedang / tahu goreng 3 potong kecil", "Teh tawar tanpa gula 1 gelas besar"],
-      kal: 200
-    },
-    malam: {
-      name: "Mie Goreng Sehat (Warteg / Masak Sendiri)",
-      items: ["Mie rebus / bihun goreng 1 porsi kecil", "Tambah: sawi, wortel, telur orak-arik", "Minta kurangi minyak dan garam", "ATAU: ganti dengan lontong sayur"],
-      kal: 420
-    },
-    tip: "Jumat boleh sedikit lebih bebas (620 kal siang) karena sabtu minggu biasanya godaan lebih banyak."
-  },
-  {
-    day: "SABTU",
-    siang: {
-      name: "Nasi + Opor Ayam Kuah Bening + Lalapan",
-      items: ["Nasi ½ porsi", "Ayam opor / ayam kuah kuning 1 potong (pilih dada)", "Lalap mentimun dan tomat", "Tempe goreng 1 potong"],
-      kal: 570
-    },
-    snack: {
-      name: "Buah Potong + Jus Tanpa Gula",
-      items: ["Pepaya 1 porsi kecil ATAU mangga ½ buah", "Jus jeruk tanpa gula / air kelapa muda 1 gelas"],
-      kal: 210
-    },
-    malam: {
-      name: "Sate Ayam (5 tusuk) + Lontong 1",
-      items: ["Sate ayam 5 tusuk (bukan sate kambing)", "Lontong 1 potong kecil", "Bumbu kacang di sisi (celup, jangan siram)", "Lalap / acar"],
-      kal: 410
-    },
-    tip: "Weekend boleh makan yang lebih enak sedikit, asal tetap dalam batas. Sate ayam adalah pilihan 'cheat meal' yang masih aman."
-  },
-  {
-    day: "MINGGU",
-    siang: {
-      name: "Rawon / Sop Buntut Kuah (Beli di Warung)",
-      items: ["Rawon 1 mangkuk (minta pakai daging sedikit, banyak kuah)", "Nasi ½ porsi", "Tauge pendek, kerupuk SKIP", "Telur asin ½ butir"],
-      kal: 600
-    },
-    snack: {
-      name: "Yogurt + Granola Sedikit",
-      items: ["Yogurt plain / Greek yogurt 1 cup", "Granola 1 sendok makan", "Buah stroberi / pisang iris sedikit"],
-      kal: 230
-    },
-    malam: {
-      name: "Bubur Ayam Spesial (Makan Ringan)",
-      items: ["Bubur ayam 1 mangkuk (tanpa kerupuk/cakue)", "Minta tambah: suwiran ayam, cakue skip, bawang goreng sedikit", "Teh tawar"],
-      kal: 340
-    },
-    tip: "Minggu = hari recovery. Makan lebih ringan di malam hari bantu reset metabolisme untuk minggu berikutnya."
+  // NAV
+  function showSection(id) {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    const tabs = document.querySelectorAll('.nav-tab');
+    const map = { dashboard:0, kalori:1, if:2, mealplan:3, workout:4, roadmap:5, tracker:6, tips:7 };
+    tabs[map[id]].classList.add('active');
+    window.scrollTo({ top:0, behavior:'smooth' });
   }
-];
 
-// ─────────────────────────────────────────
-// DATA WORKOUT
-// ─────────────────────────────────────────
-const workoutPhases = [
-  {
-    name: "FASE 1 — FONDASI",
-    months: "Bulan 1–2",
-    desc: "Membangun kebiasaan dan basic strength. Volume rendah, teknik benar, fokus konsistensi.",
-    badge: "🔥 Pemula",
-    color: "accent",
-    burnEst: "200–300 kal/sesi",
-    days: [
-      {
-        label: "SENIN", name: "Lower Body",
-        exercises: [
-          { name: "Squat", reps: "3×15" },
-          { name: "Lunges per kaki", reps: "3×10" },
-          { name: "Calf Raise", reps: "3×20" },
-          { name: "Glute Bridge", reps: "3×15" },
-          { name: "Wall Sit", reps: "3×30det" }
-        ]
-      },
-      {
-        label: "SELASA", name: "Upper Body",
-        exercises: [
-          { name: "Push-up (knee ok)", reps: "3×10" },
-          { name: "Pike Push-up", reps: "3×8" },
-          { name: "Tricep Dips (kursi)", reps: "3×10" },
-          { name: "Superman Hold", reps: "3×10" },
-          { name: "Plank", reps: "3×20det" }
-        ]
-      },
-      {
-        label: "RABU", name: "Core + Cardio",
-        exercises: [
-          { name: "High Knees", reps: "4×30det" },
-          { name: "Jumping Jack", reps: "4×30det" },
-          { name: "Crunch", reps: "3×15" },
-          { name: "Leg Raise", reps: "3×12" },
-          { name: "Mountain Climber", reps: "3×20" }
-        ]
-      },
-      {
-        label: "KAMIS", name: "Full Body",
-        exercises: [
-          { name: "Squat + Press", reps: "3×12" },
-          { name: "Push-up", reps: "3×10" },
-          { name: "Burpee (slow)", reps: "3×6" },
-          { name: "Bicycle Crunch", reps: "3×16" },
-          { name: "Plank Hold", reps: "3×25det" }
-        ]
-      },
-      {
-        label: "JUMAT", name: "HIIT Ringan",
-        exercises: [
-          { name: "Jump Squat", reps: "4×10" },
-          { name: "Push-up", reps: "4×8" },
-          { name: "High Knees", reps: "4×30det" },
-          { name: "Sit-up", reps: "3×15" },
-          { name: "Burpee", reps: "3×5" }
-        ]
-      },
-      {
-        label: "SABTU", name: "Active Recovery",
-        exercises: [
-          { name: "Jalan santai 20 mnt", reps: "1×" },
-          { name: "Stretching seluruh tubuh", reps: "10 mnt" },
-          { name: "Foam roll (pakai botol)", reps: "5 mnt" }
-        ]
-      },
-      { label: "MINGGU", name: "REST", exercises: [], rest: true }
-    ]
-  },
-  {
-    name: "FASE 2 — INTENSITAS",
-    months: "Bulan 3–4",
-    desc: "Volume dan intensitas naik. Tambah superset dan HIIT yang lebih keras. Tubuh sudah siap.",
-    badge: "⚡ Intermediate",
-    color: "green",
-    burnEst: "300–450 kal/sesi",
-    days: [
-      {
-        label: "SENIN", name: "Lower Power",
-        exercises: [
-          { name: "Jump Squat", reps: "4×15" },
-          { name: "Sumo Squat", reps: "4×15" },
-          { name: "Reverse Lunge", reps: "4×12/kaki" },
-          { name: "Glute Bridge Pulse", reps: "4×20" },
-          { name: "Wall Sit", reps: "4×45det" }
-        ]
-      },
-      {
-        label: "SELASA", name: "Upper Push/Pull",
-        exercises: [
-          { name: "Push-up Wide", reps: "4×15" },
-          { name: "Diamond Push-up", reps: "4×10" },
-          { name: "Pike Push-up", reps: "4×12" },
-          { name: "Dips (kursi)", reps: "4×15" },
-          { name: "Plank Up-Down", reps: "3×10" }
-        ]
-      },
-      {
-        label: "RABU", name: "HIIT Circuit",
-        exercises: [
-          { name: "Burpee", reps: "4×12" },
-          { name: "Jump Squat", reps: "4×15" },
-          { name: "Mountain Climber", reps: "4×30det" },
-          { name: "High Knees Sprint", reps: "4×40det" },
-          { name: "Push-up", reps: "4×12" }
-        ]
-      },
-      {
-        label: "KAMIS", name: "Core Attack",
-        exercises: [
-          { name: "V-Up", reps: "4×15" },
-          { name: "Russian Twist", reps: "4×20" },
-          { name: "Leg Raise", reps: "4×15" },
-          { name: "Plank Hold", reps: "4×45det" },
-          { name: "Side Plank (tiap sisi)", reps: "3×30det" }
-        ]
-      },
-      {
-        label: "JUMAT", name: "Full Body Blast",
-        exercises: [
-          { name: "Burpee", reps: "5×10" },
-          { name: "Push-up + Row", reps: "4×12" },
-          { name: "Jump Lunge", reps: "4×10/kaki" },
-          { name: "Plank to Push-up", reps: "3×10" },
-          { name: "Bicycle Crunch", reps: "3×20" }
-        ]
-      },
-      {
-        label: "SABTU", name: "Active Recovery",
-        exercises: [
-          { name: "Jalan santai 25 mnt", reps: "1×" },
-          { name: "Full body stretching", reps: "15 mnt" },
-          { name: "Foam roll", reps: "5 mnt" }
-        ]
-      },
-      { label: "MINGGU", name: "REST", exercises: [], rest: true }
-    ]
-  },
-  {
-    name: "FASE 3 — SHRED",
-    months: "Bulan 5–6",
-    desc: "Mode pembakaran lemak maksimal. High intensity, pendek, padat. Tubuh sudah terlatih, saatnya gas pol.",
-    badge: "🔴 Advanced",
-    color: "purple",
-    burnEst: "400–550 kal/sesi",
-    days: [
-      {
-        label: "SENIN", name: "Leg AMRAP",
-        exercises: [
-          { name: "Jump Squat", reps: "5×20" },
-          { name: "Bulgarian Split Squat", reps: "4×15/kaki" },
-          { name: "Jump Lunge", reps: "4×14" },
-          { name: "Squat Hold Pulse", reps: "3×30det" },
-          { name: "Single Leg Deadlift", reps: "3×12" }
-        ]
-      },
-      {
-        label: "SELASA", name: "Push Strength",
-        exercises: [
-          { name: "Decline Push-up", reps: "5×15" },
-          { name: "Archer Push-up", reps: "4×8/sisi" },
-          { name: "Pike Push-up", reps: "4×15" },
-          { name: "Dips", reps: "4×20" },
-          { name: "Pseudo Planche Lean", reps: "3×20det" }
-        ]
-      },
-      {
-        label: "RABU", name: "Cardio HIIT 20 mnt",
-        exercises: [
-          { name: "Tabata: Burpee 20det/10det rest", reps: "8 round" },
-          { name: "Tabata: Jump Squat", reps: "8 round" },
-          { name: "Finisher: Mountain Climber", reps: "2×60det" }
-        ]
-      },
-      {
-        label: "KAMIS", name: "Core + Oblique",
-        exercises: [
-          { name: "Dragon Flag (asist)", reps: "4×8" },
-          { name: "Windshield Wiper", reps: "4×10" },
-          { name: "Hollow Body Hold", reps: "4×30det" },
-          { name: "Side Plank Crunch", reps: "4×15/sisi" },
-          { name: "Ab Wheel (kaki)", reps: "3×10" }
-        ]
-      },
-      {
-        label: "JUMAT", name: "Full Shred",
-        exercises: [
-          { name: "Burpee Broad Jump", reps: "5×8" },
-          { name: "Explosive Push-up", reps: "4×10" },
-          { name: "Speed Squat", reps: "5×20" },
-          { name: "Bear Crawl 10 langkah", reps: "4×" },
-          { name: "Sprint in Place", reps: "4×45det" }
-        ]
-      },
-      {
-        label: "SABTU", name: "Active Recovery",
-        exercises: [
-          { name: "Jalan santai 30 mnt", reps: "1×" },
-          { name: "Full stretch + foam roll", reps: "15 mnt" },
-          { name: "Pernapasan dan meditasi", reps: "5 mnt" }
-        ]
-      },
-      { label: "MINGGU", name: "REST", exercises: [], rest: true }
-    ]
+  // MEAL DAYS
+  function showDay(n) {
+    document.querySelectorAll('.meal-card').forEach(c => c.classList.remove('active'));
+    document.querySelectorAll('.day-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('day-' + n).classList.add('active');
+    document.querySelectorAll('.day-btn')[n-1].classList.add('active');
   }
-];
 
-// ─────────────────────────────────────────
-// DATA PROGRESS
-// ─────────────────────────────────────────
-const progressData = [
-  {
-    month: "BULAN 1",
-    bbAwal: 90, bbAkhir: 86, turun: 4,
-    highlights: ["Tubuh mulai beradaptasi", "IF makin terasa mudah", "Workout masih ringan tapi konsisten", "Muka mulai terlihat lebih tirus"],
-    workoutPhase: "Fase 1",
-    color: "orange"
-  },
-  {
-    month: "BULAN 2",
-    bbAwal: 86, bbAkhir: 82, turun: 4,
-    highlights: ["Metabolisme mulai aktif", "Stamina workout meningkat", "Defisit konsisten ~1000 kal/hari", "Baju mulai longgar"],
-    workoutPhase: "Fase 1",
-    color: "orange"
-  },
-  {
-    month: "BULAN 3",
-    bbAwal: 82, bbAkhir: 78.5, turun: 3.5,
-    highlights: ["Fase 2 dimulai, burn lebih banyak", "Ada plateau sedikit normal", "Otot mulai terbentuk (perut, paha)", "Energi harian lebih stabil"],
-    workoutPhase: "Fase 2",
-    color: "green"
-  },
-  {
-    month: "BULAN 4",
-    bbAwal: 78.5, bbAkhir: 75.5, turun: 3,
-    highlights: ["Plateau bisa terjadi — normal!", "Naik intensitas HIIT", "Tambah protein di makan siang", "Body recomposition mulai kentara"],
-    workoutPhase: "Fase 2",
-    color: "green"
-  },
-  {
-    month: "BULAN 5",
-    bbAwal: 75.5, bbAkhir: 72.5, turun: 3,
-    highlights: ["Fase 3: Shred mode aktif", "Visible muscle definition", "Perut lebih rata", "Kalori bisa turun ke 1.600 kal"],
-    workoutPhase: "Fase 3",
-    color: "green"
-  },
-  {
-    month: "BULAN 6",
-    bbAwal: 72.5, bbAkhir: 70, turun: 2.5,
-    highlights: ["TARGET TERCAPAI! 🎉", "70kg — BMI Normal", "Maintenance dimulai di 1.900-2.000 kal", "Tubuh fit, sehat, confidence meningkat"],
-    workoutPhase: "Fase 3",
-    color: "green"
+  // WORKOUT
+  const workoutMap = {
+    sen: 'push', sel: 'pull', rab: 'legs', kam: 'push', jum: 'pull', sab: 'full', min: 'rest'
+  };
+
+  function showWorkout(day) {
+    document.querySelectorAll('.workout-detail').forEach(d => d.classList.remove('active'));
+    document.querySelectorAll('.week-day').forEach(d => d.classList.remove('active-day'));
+    document.getElementById('workout-' + day).classList.add('active');
+    const days = ['sen','sel','rab','kam','jum','sab','min'];
+    const idx = days.indexOf(day);
+    document.querySelectorAll('.week-day')[idx].classList.add('active-day');
   }
-];
 
-// ─────────────────────────────────────────
-// RENDER FUNCTIONS
-// ─────────────────────────────────────────
+  // CHECKLIST
+  function toggleCheck(el) {
+    el.classList.toggle('checked');
+    updateCheckProgress();
+  }
 
-function showSection(name) {
-  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-  document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
-  document.getElementById('sec-' + name).classList.add('active');
-  event.target.classList.add('active');
-}
+  function updateCheckProgress() {
+    const items = document.querySelectorAll('.checklist-item');
+    const checked = document.querySelectorAll('.checklist-item.checked').length;
+    document.getElementById('check-count').textContent = checked + '/' + items.length;
+    document.getElementById('check-bar').style.width = (checked / items.length * 100) + '%';
+  }
 
-let currentDay = 0;
-function showDay(idx) {
-  currentDay = idx;
-  document.querySelectorAll('.day-tab').forEach((t, i) => {
-    t.classList.toggle('active', i === idx);
+  function resetChecklist() {
+    document.querySelectorAll('.checklist-item').forEach(i => i.classList.remove('checked'));
+    updateCheckProgress();
+  }
+
+  // WATER TRACKER
+  const waterState = new Array(8).fill(false);
+
+  function toggleGlass(idx) {
+    waterState[idx] = !waterState[idx];
+    const glasses = document.querySelectorAll('.glass');
+    if (waterState[idx]) {
+      glasses[idx].classList.add('filled');
+      glasses[idx].textContent = '💧';
+    } else {
+      glasses[idx].classList.remove('filled');
+      glasses[idx].textContent = '🥛';
+    }
+    const count = waterState.filter(Boolean).length;
+    const msg = count === 0 ? '0 / 8 gelas' :
+                count < 4 ? count + ' / 8 gelas — terus minum!' :
+                count < 8 ? count + ' / 8 gelas — hampir!' :
+                '8 / 8 gelas — DONE! 🎉';
+    document.getElementById('water-status').textContent = msg;
+    document.getElementById('water-status').style.color = count === 8 ? 'var(--accent3)' : 'var(--muted)';
+  }
+
+  // WEIGHT LOG
+  const weightLog = [];
+
+  function logWeight() {
+    const val = parseFloat(document.getElementById('weight-input').value);
+    if (!val || val < 30 || val > 300) return;
+    const now = new Date();
+    const dateStr = now.toLocaleDateString('id-ID', { day:'numeric', month:'short', year:'numeric' });
+    weightLog.unshift({ date: dateStr, val: val });
+    renderWeightLog();
+    document.getElementById('weight-input').value = '';
+  }
+
+  function deleteWeight(idx) {
+    weightLog.splice(idx, 1);
+    renderWeightLog();
+  }
+
+  function renderWeightLog() {
+    const container = document.getElementById('weight-log');
+    if (weightLog.length === 0) {
+      container.innerHTML = '<div style="color:var(--muted); font-size:0.8rem; text-align:center; padding:20px;">Belum ada data.</div>';
+      return;
+    }
+    container.innerHTML = weightLog.map((e, i) => `
+      <div class="weight-entry">
+        <span class="weight-entry-date">${e.date}</span>
+        <span class="weight-entry-val">${e.val} kg</span>
+        ${i > 0 ? `<span style="font-size:0.75rem; color:${e.val < weightLog[i+1]?.val ? 'var(--accent3)' : 'var(--danger)'}">
+          ${e.val < (weightLog[i+1]?.val || e.val) ? '▼' : '▲'} ${Math.abs(e.val - (weightLog[i+1]?.val || e.val)).toFixed(1)} kg
+        </span>` : '<span></span>'}
+        <button class="delete-btn" onclick="deleteWeight(${i})">×</button>
+      </div>
+    `).join('');
+  }
+
+  // SCROLL TOP
+  window.addEventListener('scroll', () => {
+    const btn = document.getElementById('scrollTop');
+    if (window.scrollY > 300) btn.classList.add('visible');
+    else btn.classList.remove('visible');
   });
-  renderDay(idx);
-}
-
-function renderDay(idx) {
-  const m = meals[idx];
-  const total = m.siang.kal + m.snack.kal + m.malam.kal;
-  const deficit = 2700 - total;
-
-  const html = `
-    <div class="meal-grid">
-      <div class="meal-card siang">
-        <div class="meal-time siang">☀️ MAKAN SIANG · 12:00–13:00</div>
-        <div class="meal-name">${m.siang.name}</div>
-        <ul class="meal-items">
-          ${m.siang.items.map(i => `<li>${i}</li>`).join('')}
-        </ul>
-        <span class="kal-badge">${m.siang.kal} kal</span>
-      </div>
-      <div class="meal-card snack">
-        <div class="meal-time snack">🟢 SNACK SORE · 15:00–16:00</div>
-        <div class="meal-name">${m.snack.name}</div>
-        <ul class="meal-items">
-          ${m.snack.items.map(i => `<li>${i}</li>`).join('')}
-        </ul>
-        <span class="kal-badge">${m.snack.kal} kal</span>
-      </div>
-    </div>
-    <div class="meal-card malam" style="margin-bottom:16px">
-      <div class="meal-time malam">🌙 MAKAN MALAM · 18:00–19:30</div>
-      <div class="meal-name">${m.malam.name}</div>
-      <ul class="meal-items">
-        ${m.malam.items.map(i => `<li>${i}</li>`).join('')}
-      </ul>
-      <span class="kal-badge">${m.malam.kal} kal</span>
-    </div>
-    <div class="tip-box">💡 <strong>Tip ${m.day}:</strong> ${m.tip}</div>
-    <div class="day-total">
-      <div>
-        <div class="label">${m.day} — Total Kalori</div>
-        <div class="total-kal">${total} KAL</div>
-      </div>
-      <div>
-        <div class="deficit">−${deficit} kal defisit</div>
-        <div style="font-size:11px;color:var(--muted);text-align:right;margin-top:2px">vs TDEE 2.700</div>
-      </div>
-    </div>
-  `;
-  document.getElementById('dayContent').innerHTML = html;
-}
-
-let currentPhase = 0;
-function showPhase(idx) {
-  currentPhase = idx;
-  document.querySelectorAll('.phase-tab').forEach((t, i) => {
-    t.classList.toggle('active', i === idx);
-  });
-  renderPhase(idx);
-}
-
-function renderPhase(idx) {
-  const p = workoutPhases[idx];
-  const dayCards = p.days.map(d => {
-    if (d.rest) return `
-      <div class="wo-day-card rest">
-        <div class="wo-day-label">${d.label}</div>
-        <div class="wo-day-name">😴 REST DAY</div>
-        <div style="font-size:12px;color:var(--muted)">Tidur cukup,<br>minum banyak</div>
-      </div>
-    `;
-    return `
-      <div class="wo-day-card">
-        <div class="wo-day-label">${d.label}</div>
-        <div class="wo-day-name">${d.name}</div>
-        <ul class="wo-exercises">
-          ${d.exercises.map(e => `
-            <li>
-              <span>${e.name}</span>
-              <span class="reps ${p.color === 'green' ? 'green' : ''}">${e.reps}</span>
-            </li>
-          `).join('')}
-        </ul>
-      </div>
-    `;
-  });
-
-  const html = `
-    <div class="wo-header">
-      <div>
-        <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:2px">${p.name}</div>
-        <div style="font-size:13px;color:var(--muted)">${p.desc}</div>
-      </div>
-    </div>
-    <div style="display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap">
-      <div class="duration-badge">⏱ ≤ 30 menit / sesi</div>
-      <div class="duration-badge">🔥 Est. ${p.burnEst}</div>
-      <div class="duration-badge">📅 ${p.months}</div>
-    </div>
-    <div class="wo-week-grid">
-      ${dayCards.join('')}
-    </div>
-    <div class="tip-box">
-      📋 <strong>Cara pakai:</strong> Istirahat antar set 45–60 detik. Kalau belum kuat, kurangi reps dulu, yang penting form benar. Selesaikan semua set sebelum 30 menit. Workout bisa dilakukan jam 16:00–18:00 setelah snack sore.
-    </div>
-  `;
-  document.getElementById('phaseContent').innerHTML = html;
-}
-
-function renderProgress() {
-  const html = progressData.map((p, i) => `
-    <div class="timeline-item">
-      <div class="timeline-dot ${p.color === 'green' ? 'green' : ''} ${i < 2 ? 'done' : ''}"></div>
-      <div class="timeline-month">${p.month}</div>
-      <div class="timeline-card">
-        <div class="timeline-stats">
-          <div class="ts-item">
-            <div class="ts-label">BB Awal</div>
-            <div class="ts-val">${p.bbAwal} kg</div>
-          </div>
-          <div class="ts-item">
-            <div class="ts-label">BB Akhir</div>
-            <div class="ts-val ${p.color}">${p.bbAkhir} kg</div>
-          </div>
-          <div class="ts-item">
-            <div class="ts-label">Turun</div>
-            <div class="ts-val ${p.color}">−${p.turun} kg</div>
-          </div>
-          <div class="ts-item">
-            <div class="ts-label">Workout</div>
-            <div class="ts-val" style="font-size:16px">${p.workoutPhase}</div>
-          </div>
-        </div>
-        <div class="change-pills">
-          ${p.highlights.map(h => `<span class="pill ${p.color === 'orange' ? 'orange' : ''}">${h}</span>`).join('')}
-        </div>
-      </div>
-    </div>
-  `).join('');
-  document.getElementById('progressTimeline').innerHTML = html;
-}
-
-// INIT
-renderDay(0);
-renderPhase(0);
-renderProgress();
 </script>
+
 </body>
 </html>
